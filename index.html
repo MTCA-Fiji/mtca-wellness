@@ -177,11 +177,9 @@
 </head>
 <body>
 
-<!-- LOADING -->
-<div id="loading-overlay">
-  <div class="logo">MT</div>
-  <div class="spinner"></div>
-  <p>Connecting to MTCA Wellness...</p>
+<!-- SLIM LOADING BANNER -->
+<div id="loading-overlay" style="display:none;position:fixed;top:56px;left:0;right:0;z-index:200;background:#003087;color:#fff;font-size:13px;text-align:center;padding:8px;letter-spacing:0.3px;">
+  <span style="opacity:0.8;">Connecting to database...</span>
 </div>
 
 <!-- TOPBAR -->
@@ -463,15 +461,17 @@ function setSyncing(state) {
   label.textContent = state === 'syncing' ? 'Syncing...' : state === '' ? 'Live' : 'Offline';
 }
 
-// Listen to Firebase in real time
+// Show app immediately, hide loading overlay right away
+document.getElementById('loading-overlay').style.display = 'none';
+renderDashboard();
+
+// Listen to Firebase in real time - data loads in background
 onValue(ref(db, 'participants'), snap => {
   participants = snap.val() || {};
   refreshAll();
-  document.getElementById('loading-overlay').style.display = 'none';
   setSyncing('');
 }, err => {
   setSyncing('offline');
-  document.getElementById('loading-overlay').style.display = 'none';
 });
 
 onValue(ref(db, 'weighins'), snap => {
