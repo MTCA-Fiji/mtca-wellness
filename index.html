@@ -461,9 +461,8 @@ function setSyncing(state) {
   label.textContent = state === 'syncing' ? 'Syncing...' : state === '' ? 'Live' : 'Offline';
 }
 
-// Show app immediately, hide loading overlay right away
+// Show app immediately
 document.getElementById('loading-overlay').style.display = 'none';
-renderDashboard();
 
 // Listen to Firebase in real time - data loads in background
 onValue(ref(db, 'participants'), snap => {
@@ -826,6 +825,9 @@ window.showPageMobile = function(name) {
   const a = document.createElement('a'); a.href = url; a.download = filename; a.click();
   URL.revokeObjectURL(url);
 }
+
+// Initialise after all functions are defined
+renderDashboard();
 
 </script>
 </body>
