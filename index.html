@@ -151,9 +151,9 @@ canvas{width:100%!important;display:block}
         <div id="ra"></div>
         <div class="fg"><div class="field"><label>Full name</label><input type="text" id="rn" placeholder="Your full name"></div><div class="field"><label>Division</label><select id="rd"><option value="">Select division</option><option>Office of the Permanent Secretary</option><option>Tourism Development</option><option>Tourism Industry</option><option>Civil Aviation</option><option>Finance &amp; Corporate Services</option></select></div></div>
         <div class="fg"><div class="field"><label>Height (cm)</label><input type="number" id="rh" placeholder="e.g. 175" inputmode="decimal"></div><div class="field"><label>Baseline weight (kg)</label><input type="number" id="rw" placeholder="e.g. 82.5" step="0.1" inputmode="decimal"></div></div>
-        <div class="fg c1"><div class="field"><label>Witness name</label><input type="text" id="rwit" placeholder="Witnessing colleague"></div></div>
+        <div class="fg"><div class="field"><label>Witness name</label><input type="text" id="rwit" placeholder="Witnessing colleague"></div><div class="field"><label>Your 4-digit PIN</label><input type="password" id="rpin" placeholder="e.g. 1234" maxlength="4" inputmode="numeric"></div></div>
         <button class="btn btnp" onclick="doRegister()">Register &rarr;</button>
-        <p class="note">&#128274; Your weight is private. Only percentage changes appear on leaderboards.</p>
+        <p class="note">&#128274; Your weight is private. Only percentage changes appear on leaderboards.#128274; Your weight is private. Your PIN locks your progress so only you can view it.</p>
       </div>
       <div class="card"><div class="ctitle"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Registered participants</div><div class="tw" id="rt"><div class="empty"><strong>Loading data...</strong></div></div></div>
     </div>
@@ -173,9 +173,19 @@ canvas{width:100%!important;display:block}
 
     <div class="page" id="p-progress">
       <div class="ptitle">My progress</div>
-      <div class="psub">Select your name to view your weight journey.</div>
-      <div class="field" style="margin-bottom:15px;"><select id="ps" onchange="renderProgress()" style="width:100%;padding:10px 11px;border:1px solid var(--border);border-radius:var(--rs);font-size:15px;color:var(--text);background:var(--surface);"><option value="">Select your name</option></select></div>
-      <div id="pc"><div class="empty"><strong>Select your name above</strong>Your progress will appear here.</div></div>
+      <div class="psub">Select your name and enter your PIN to view your progress.</div>
+      <div class="card" id="pin-gate">
+        <div id="pina"></div>
+        <div class="fg">
+          <div class="field"><label>Your name</label><select id="ps" style="width:100%;padding:10px 11px;border:1px solid var(--border);border-radius:var(--rs);font-size:15px;color:var(--text);background:var(--surface);"><option value="">Select your name</option></select></div>
+          <div class="field"><label>Your 4-digit PIN</label><input type="password" id="pinentry" placeholder="Enter PIN" maxlength="4" inputmode="numeric"></div>
+        </div>
+        <button class="btn btnp" onclick="checkPIN()">View my progress &rarr;</button>
+      </div>
+      <div id="pc" style="display:none;"></div>
+      <div id="pin-logout" style="display:none;margin-bottom:12px;">
+        <button class="btn btnd btnsm" onclick="lockProgress()">&#128274; Lock &amp; exit</button>
+      </div>
     </div>
 
     <div class="page" id="p-leaderboard">
@@ -242,7 +252,7 @@ function go(name) {
   if(name==='dashboard') renderDash();
   if(name==='register') renderRegTable();
   if(name==='weighin'){fillSel('wn');renderWR();}
-  if(name==='progress'){fillSel('ps');renderProgress();}
+  if(name==='progress'){fillSel('ps');if(!unlockedUser){document.getElementById('pin-gate').style.display='block';document.getElementById('pc').style.display='none';document.getElementById('pin-logout').style.display='none';}}
   if(name==='leaderboard') renderLB();
   if(name==='export') renderExport();
   window.scrollTo(0,0);
@@ -287,7 +297,7 @@ function refresh(){
   if(name==='dashboard') renderDash();
   if(name==='register') renderRegTable();
   if(name==='weighin'){fillSel('wn');renderWR();}
-  if(name==='progress'){fillSel('ps');renderProgress();}
+  if(name==='progress'){fillSel('ps');if(!unlockedUser){document.getElementById('pin-gate').style.display='block';document.getElementById('pc').style.display='none';document.getElementById('pin-logout').style.display='none';}}
   if(name==='leaderboard') renderLB();
   if(name==='export') renderExport();
 }
@@ -299,16 +309,18 @@ function doRegister(){
   var h=parseFloat(document.getElementById('rh').value);
   var w=parseFloat(document.getElementById('rw').value);
   var wit=document.getElementById('rwit').value.trim();
-  if(!name||!dept||!h||!w||!wit){alert2('ra','Please complete all fields.','i');return}
+  var pin=document.getElementById('rpin').value.trim();
+  if(!name||!dept||!h||!w||!wit||!pin){alert2('ra','Please complete all fields including your PIN.','i');return}
+  if(pin.length!==4||!/^\d{4}$/.test(pin)){alert2('ra','PIN must be exactly 4 digits.','i');return}
   if(Object.values(P).find(function(p){return p.name.toLowerCase()===name.toLowerCase()})){alert2('ra',name+' is already registered.','i');return}
   var b=+fmt(bmi(w,h));
   var cat=bmiCat(b);
-  var data={name:name,dept:dept,height:h,baseline:w,bmi:b,bmiL:cat.l,bmiC:cat.c,witness:wit,regDate:new Date().toLocaleDateString('en-FJ'),ts:Date.now()};
+  var data={name:name,dept:dept,height:h,baseline:w,bmi:b,bmiL:cat.l,bmiC:cat.c,witness:wit,pin:pin,regDate:new Date().toLocaleDateString('en-FJ'),ts:Date.now()};
   if(fbReady){
     setStat('sync');
     window._fbdb.ref('participants').push(data).then(function(){
       setStat('');
-      ['rn','rh','rw','rwit'].forEach(function(id){document.getElementById(id).value=''});
+      ['rn','rh','rw','rwit','rpin'].forEach(function(id){document.getElementById(id).value=''});
       document.getElementById('rd').value='';
       alert2('ra',name+' registered successfully!','s');
     });
@@ -394,11 +406,39 @@ function renderWR(){
   el.innerHTML=h;
 }
 
+// ---- PROGRESS PIN GATE ----
+var unlockedUser = null;
+
+function checkPIN(){
+  var name=document.getElementById('ps').value;
+  var pin=document.getElementById('pinentry').value.trim();
+  if(!name){alert2('pina','Please select your name.','i');return}
+  if(!pin){alert2('pina','Please enter your PIN.','i');return}
+  var p=Object.values(P).find(function(x){return x.name===name});
+  if(!p){alert2('pina','Participant not found.','i');return}
+  if(p.pin!==pin){alert2('pina','Incorrect PIN. Please try again.','i');document.getElementById('pinentry').value='';return}
+  unlockedUser=name;
+  document.getElementById('pin-gate').style.display='none';
+  document.getElementById('pc').style.display='block';
+  document.getElementById('pin-logout').style.display='block';
+  renderProgress();
+}
+
+function lockProgress(){
+  unlockedUser=null;
+  document.getElementById('pin-gate').style.display='block';
+  document.getElementById('pc').style.display='none';
+  document.getElementById('pin-logout').style.display='none';
+  document.getElementById('pinentry').value='';
+  document.getElementById('ps').value='';
+  document.getElementById('pc').innerHTML='';
+}
+
 // ---- PROGRESS ----
 function renderProgress(){
-  var name=document.getElementById('ps').value;
+  var name=unlockedUser;
   var el=document.getElementById('pc');
-  if(!name){el.innerHTML='<div class="empty"><strong>Select your name above</strong>Your progress will appear here.</div>';return}
+  if(!name){el.innerHTML='<div class="empty"><strong>Not unlocked</strong></div>';return}
   var p=Object.values(P).find(function(x){return x.name===name});
   if(!p) return;
   var recs=pwi(name);
