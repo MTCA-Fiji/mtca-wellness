@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MTCA Wellness Weight Challenge</title>
+<style>
+:root{--navy:#002060;--gold:#C8A84B;--success:#1a7a4a;--success-bg:#e6f4ec;--warning:#7a5c00;--warning-bg:#fff8e1;--danger:#b32222;--danger-bg:#fdeaea;--info:#0d5fa3;--info-bg:#e6f0fa;--text:#1a1a2e;--muted:#5a6278;--border:#d0d8e8;--bg:#f4f6fb;--surface:#fff;--r:10px;--rs:6px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);font-size:15px}
+.topbar{background:var(--navy);color:#fff;padding:0 16px;display:flex;align-items:center;gap:12px;height:54px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,32,96,.2)}
+.tlogo{width:34px;height:34px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:var(--navy);flex-shrink:0}
+.ttitle{font-size:14px;font-weight:600}
+.tsub{font-size:11px;color:rgba(255,255,255,.5);margin-top:1px}
+.tright{margin-left:auto;display:flex;align-items:center;gap:8px}
+.sdot{width:8px;height:8px;border-radius:50%;background:#4caf50}
+.sdot.off{background:#f44336}.sdot.sync{background:var(--gold);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.slabel{font-size:11px;color:rgba(255,255,255,.55)}
+.mbtn{display:none;background:none;border:none;color:#fff;cursor:pointer;padding:4px}
+.mbtn svg{width:24px;height:24px}
+.layout{display:flex;min-height:calc(100vh - 54px)}
+.sidebar{width:188px;background:var(--surface);border-right:1px solid var(--border);padding:18px 0;flex-shrink:0}
+.nlabel{font-size:10px;font-weight:700;letter-spacing:1.2px;color:var(--muted);padding:0 16px 8px;text-transform:uppercase}
+.ni{display:flex;align-items:center;gap:10px;padding:10px 16px;font-size:14px;color:var(--muted);cursor:pointer;border-left:3px solid transparent}
+.ni svg{width:17px;height:17px;flex-shrink:0}
+.ni:hover{background:#e8eef7;color:var(--navy)}
+.ni.active{background:#e8eef7;color:var(--navy);border-left-color:var(--navy);font-weight:600}
+.main{flex:1;padding:22px 18px 100px;max-width:860px}
+.page{display:none}.page.active{display:block}
+.ptitle{font-size:19px;font-weight:700;color:var(--navy);margin-bottom:3px}
+.psub{font-size:13px;color:var(--muted);margin-bottom:18px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;margin-bottom:14px}
+.ctitle{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:12px;display:flex;align-items:center;gap:7px}
+.ctitle svg{width:15px;height:15px;color:var(--gold);flex-shrink:0}
+.srow{display:grid;grid-template-columns:repeat(auto-fit,minmax(108px,1fr));gap:10px;margin-bottom:14px}
+.sbox{background:var(--bg);border-radius:var(--rs);padding:12px 13px}
+.slbl{font-size:10px;color:var(--muted);margin-bottom:3px;text-transform:uppercase;letter-spacing:.5px}
+.sval{font-size:22px;font-weight:700;color:var(--navy);line-height:1}
+.sunit{font-size:12px;font-weight:400;color:var(--muted)}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:11px}
+.fg.c1{grid-template-columns:1fr}
+.field label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:4px}
+.field input,.field select{width:100%;padding:10px 11px;border:1px solid var(--border);border-radius:var(--rs);font-size:15px;color:var(--text);background:var(--surface);outline:none;-webkit-appearance:none}
+.field input:focus,.field select:focus{border-color:var(--navy)}
+.btn{padding:11px 18px;border-radius:var(--rs);border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:15px;cursor:pointer;font-weight:600;width:100%}
+.btnp{background:var(--navy);color:#fff;border-color:var(--navy)}
+.btnd{color:var(--danger);border-color:var(--danger-bg);background:var(--danger-bg)}
+.btnsm{padding:6px 13px;font-size:13px;width:auto}
+.alert{border-radius:var(--rs);padding:9px 13px;font-size:13px;margin-bottom:11px}
+.al-s{background:var(--success-bg);color:var(--success);border-left:3px solid var(--success)}
+.al-i{background:var(--info-bg);color:var(--info);border-left:3px solid var(--info)}
+.al-w{background:var(--warning-bg);color:var(--warning);border-left:3px solid var(--gold)}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:8px 9px;border-bottom:2px solid var(--border);color:var(--muted);font-size:11px;letter-spacing:.5px;text-transform:uppercase;font-weight:700;white-space:nowrap}
+td{padding:8px 9px;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:99px;font-weight:600}
+.bu{background:var(--info-bg);color:var(--info)}
+.bn{background:var(--success-bg);color:var(--success)}
+.bo{background:var(--warning-bg);color:var(--warning)}
+.bb{background:var(--danger-bg);color:var(--danger)}
+.pos{color:var(--success);font-weight:600}
+.neg{color:var(--danger);font-weight:600}
+.muted{color:var(--muted)}
+.pw{background:var(--bg);border-radius:99px;height:8px;overflow:hidden;margin:4px 0}
+.pf{height:8px;border-radius:99px;background:var(--navy);transition:width .5s}
+.pf.gold{background:var(--gold)}
+.av{width:34px;height:34px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.empty{text-align:center;padding:24px 12px;color:var(--muted);font-size:14px}
+.empty strong{display:block;font-size:15px;color:var(--text);margin-bottom:5px}
+.wtag{font-size:11px;background:var(--bg);color:var(--muted);padding:2px 7px;border-radius:99px;border:1px solid var(--border);white-space:nowrap}
+.note{font-size:12px;color:var(--muted);margin-top:7px;line-height:1.5}
+hr{border:none;border-top:1px solid var(--border);margin:13px 0}
+.ph{display:flex;align-items:center;gap:11px;margin-bottom:14px}
+.ph .av{width:46px;height:46px;font-size:15px}
+.lbm{font-size:17px;text-align:center}
+.lbr{font-size:13px;font-weight:700;color:var(--muted);text-align:center}
+.bnav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:2px solid var(--border);z-index:999;padding:6px 0 54px;box-shadow:0 -2px 10px rgba(0,0,0,.08)}
+.bni{display:flex;justify-content:space-around}
+.bi{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:5px 8px;color:var(--muted);font-size:10px;font-weight:600;min-width:54px}
+.bi svg{width:23px;height:23px}
+.bi.active{color:var(--navy)}
+.moverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300}
+.mpanel{position:absolute;top:0;right:0;bottom:0;width:210px;background:var(--surface);padding:18px 0;overflow-y:auto;box-shadow:-3px 0 16px rgba(0,0,0,.12)}
+.mclose{padding:14px 18px;font-size:13px;color:var(--muted);cursor:pointer;border-top:1px solid var(--border);margin-top:6px}
+.chartbox{position:relative;margin:6px 0}
+canvas{width:100%!important;display:block}
+#syncbar{display:none;position:fixed;top:54px;left:0;right:0;z-index:200;background:#003087;color:#fff;font-size:12px;text-align:center;padding:6px;letter-spacing:.3px}
+@media(max-width:640px){
+  .sidebar{display:none}
+  .bnav{display:block}
+  .mbtn{display:block}
+  .main{padding:16px 13px 140px}
+  .fg{grid-template-columns:1fr}
+  .srow{grid-template-columns:1fr 1fr}
+  .tsub{display:none}
+}
+</style>
+</head>
+<body>
+
+<div id="syncbar">Connecting to database...</div>
+
+<div class="topbar">
+  <div class="tlogo">MT</div>
+  <div>
+    <div class="ttitle">Wellness Weight Challenge</div>
+    <div class="tsub">Ministry of Tourism &amp; Civil Aviation</div>
+  </div>
+  <div class="tright">
+    <div class="sdot sync" id="sdot"></div>
+    <span class="slabel" id="slabel">Connecting</span>
+    <button class="mbtn" onclick="openMenu()" aria-label="Menu">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</div>
+
+<div class="layout">
+  <nav class="sidebar">
+    <div class="nlabel">Programme</div>
+    <div class="ni active" onclick="go('dashboard')" id="n-dashboard"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</div>
+    <div class="ni" onclick="go('register')" id="n-register"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="16" y1="11" x2="22" y2="11"/></svg>Register</div>
+    <div class="ni" onclick="go('weighin')" id="n-weighin"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Weigh-in</div>
+    <div class="ni" onclick="go('progress')" id="n-progress"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>My progress</div>
+    <div class="ni" onclick="go('leaderboard')" id="n-leaderboard"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="18 20 18 10"/><polyline points="12 20 12 4"/><polyline points="6 20 6 14"/></svg>Leaderboard</div>
+    <div class="ni" onclick="go('export')" id="n-export"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export</div>
+    <div class="nlabel" style="margin-top:12px;">Admin</div>
+    <div class="ni" onclick="go('admin')" id="n-admin"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0 1 12 0v2"/><line x1="18" y1="8" x2="22" y2="8"/><line x1="20" y1="6" x2="20" y2="10"/></svg>Admin</div>
+  </nav>
+
+  <main class="main">
+
+    <div class="page active" id="p-dashboard">
+      <div class="ptitle">Dashboard</div>
+      <div class="psub">MTCA Wellness Weight Challenge overview</div>
+      <div class="srow">
+        <div class="sbox"><div class="slbl">Registered</div><div class="sval" id="ds1">0</div></div>
+        <div class="sbox"><div class="slbl">Active</div><div class="sval" id="ds2">0</div></div>
+        <div class="sbox"><div class="slbl">Weigh-ins</div><div class="sval" id="ds3">0</div></div>
+        <div class="sbox"><div class="slbl">Losing weight</div><div class="sval pos" id="ds4">0</div></div>
+      </div>
+      <div class="card"><div class="ctitle"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>Participation by division</div><div id="dd"></div></div>
+      <div class="card"><div class="ctitle"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Recent activity</div><div id="dr"></div></div>
+    </div>
+
+    <div class="page" id="p-register">
+      <div class="ptitle">Register</div>
+      <div class="psub">Enter your details to join the programme.</div>
+      <div class="card">
+        <div id="ra"></div>
+        <div class="fg"><div class="field"><label>Full name</label><input type="text" id="rn" placeholder="Your full name"></div><div class="field"><label>Division</label><select id="rd"><option value="">Select division</option><option>Executives</option><option>Tourism Department</option><option>Na Vualiku (CPMU)</option><option>Civil Aviation Department</option><option>Corporate Services</option><option>Finance and Transport Department</option></select></div></div>
+        <div class="fg"><div class="field"><label>Height (cm)</label><input type="number" id="rh" placeholder="e.g. 175" inputmode="decimal"></div><div class="field"><label>Baseline weight (kg)</label><input type="number" id="rw" placeholder="e.g. 82.5" step="0.1" inputmode="decimal"></div></div>
+        <div class="fg"><div class="field"><label>Witness name</label><input type="text" id="rwit" placeholder="Witnessing colleague"></div><div class="field"><label>Your 4-digit PIN</label><input type="password" id="rpin" placeholder="e.g. 1234" maxlength="4" inputmode="numeric"></div></div>
+        <button class="btn btnp" onclick="doRegister()">Register &rarr;</button>
+        <p class="note">&#128274; Your weight is private. Only percentage changes appear on leaderboards.#128274; Your weight is private. Your PIN locks your progress so only you can view it.</p>
+      </div>
+      <div class="card"><div class="ctitle"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Registered participants</div><div class="tw" id="rt"><div class="empty"><strong>Loading data...</strong></div></div></div>
+    </div>
+
+    <div class="page" id="p-weighin">
+      <div class="ptitle">Weigh-in</div>
+      <div class="psub">Record your Wednesday weigh-in. Must be witnessed.</div>
+      <div class="card">
+        <div id="wa"></div>
+        <div class="fg c1"><div class="field"><label>Your name</label><select id="wn"><option value="">Select your name</option></select></div></div>
+        <div class="fg"><div class="field"><label>Weight today (kg)</label><input type="number" id="ww" placeholder="e.g. 80.2" step="0.1" inputmode="decimal"></div><div class="field"><label>Witness name</label><input type="text" id="wwit" placeholder="Witnessing colleague"></div></div>
+        <button class="btn btnp" onclick="doWeighIn()">Record weigh-in &rarr;</button>
+        <p class="note">&#128197; Programme started 18 March 2026. Weigh-ins every Wednesday.</p>
+      </div>
+      <div class="card"><div class="ctitle"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Recent weigh-ins</div><div class="tw" id="wr"><div class="empty"><strong>Loading data...</strong></div></div></div>
+    </div>
+
+    <div class="page" id="p-progress">
+      <div class="ptitle">My progress</div>
+      <div class="psub">Select your name and enter your PIN to view your progress.</div>
+      <div class="card" id="pin-gate">
+        <div id="pina"></div>
+        <div class="fg">
+          <div class="field"><label>Your name</label><select id="ps" style="width:100%;padding:10px 11px;border:1px solid var(--border);border-radius:var(--rs);font-size:15px;color:var(--text);background:var(--surface);"><option value="">Select your name</option></select></div>
+          <div class="field"><label>Your 4-digit PIN</label><input type="password" id="pinentry" placeholder="Enter PIN" maxlength="4" inputmode="numeric"></div>
+        </div>
+        <button class="btn btnp" onclick="checkPIN()">View my progress &rarr;</button>
+      </div>
+      <div id="pc" style="display:none;"></div>
+      <div id="pin-logout" style="display:none;margin-bottom:12px;">
+        <button class="btn btnd btnsm" onclick="lockProgress()">&#128274; Lock &amp; exit</button>
+      </div>
+    </div>
+
+    <div class="page" id="p-leaderboard">
+      <div class="ptitle">Leaderboard</div>
+      <div class="psub">Rankings by % weight change. Weights are never shown publicly.</div>
+      <div id="lb"><div class="empty"><strong>Loading data...</strong></div></div>
+    </div>
+
+    <div class="page" id="p-export">
+      <div class="ptitle">Export</div>
+      <div class="psub">Download programme data as CSV for Excel.</div>
+      <div class="card"><div class="ctitle"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download data</div>
+        <div style="display:flex;flex-direction:column;gap:9px;">
+          <button class="btn btnp" onclick="doExport('participants')">Download registrations (CSV)</button>
+          <button class="btn btnp" onclick="doExport('weighins')">Download all weigh-ins (CSV)</button>
+        </div>
+      </div>
+      <div class="card"><div class="ctitle"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>About</div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.6;">All data is stored in Firebase (Google cloud) and syncs across every device in real time. Individual weights are private; only percentage changes appear on leaderboards.</p>
+        <div id="es" style="margin-top:10px;font-size:13px;color:var(--muted);"></div>
+      </div>
+    </div>
+
+
+    <div class="page" id="p-admin">
+      <div class="ptitle">Admin Panel</div>
+      <div class="psub">Coordinator access only.</div>
+      <div class="card" id="admin-gate">
+        <div id="adma"></div>
+        <div class="fg c1"><div class="field"><label>Your name</label><select id="adm-who" style="width:100%;padding:10px 11px;border:1px solid var(--border);border-radius:var(--rs);font-size:15px;color:var(--text);background:var(--surface);"><option value="">Select your name</option><option>Max Rayawa</option><option>Louise Shackley</option></select></div></div>
+        <div class="fg c1"><div class="field"><label>Admin password</label><input type="password" id="admpw" placeholder="Enter your password" onkeydown="if(event.key==='Enter')checkAdmin()"></div></div>
+        <button class="btn btnp" onclick="checkAdmin()">Login &rarr;</button>
+      </div>
+      <div id="admin-content" style="display:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+          <span style="font-size:13px;color:var(--success);font-weight:600;">&#128274; Admin session active</span>
+          <button class="btn btnd btnsm" onclick="adminLogout()">Logout</button>
+        </div>
+        <div class="card">
+          <div class="ctitle"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:15px;height:15px;color:var(--gold);"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit participant details</div>
+          <div class="fg c1"><div class="field"><label>Select participant</label><select id="adm-sel" onchange="loadAdminEdit()" style="width:100%;padding:10px 11px;border:1px solid var(--border);border-radius:var(--rs);font-size:15px;color:var(--text);background:var(--surface);"><option value="">Select participant</option></select></div></div>
+          <div id="adm-form" style="display:none;">
+            <div id="adm-alert"></div>
+            <div class="fg"><div class="field"><label>Full name</label><input type="text" id="adm-name"></div><div class="field"><label>Division</label><select id="adm-div"><option value="">Select division</option><option>Executives</option><option>Tourism Department</option><option>Na Vualiku (CPMU)</option><option>Civil Aviation Department</option><option>Corporate Services</option><option>Finance and Transport Department</option></select></div></div>
+            <div class="fg"><div class="field"><label>Height (cm)</label><input type="number" id="adm-h" inputmode="decimal"></div><div class="field"><label>Baseline weight (kg)</label><input type="number" id="adm-w" step="0.1" inputmode="decimal"></div></div>
+            <div style="display:flex;gap:10px;margin-top:4px;">
+              <button class="btn btnp" onclick="saveAdminEdit()" style="flex:1;">Save changes</button>
+              <button class="btn btnd btnsm" onclick="adminDelete()" style="flex:0;">Delete</button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ctitle"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:15px;height:15px;color:var(--gold);"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>All participants</div>
+          <div class="tw" id="adm-table"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<nav class="bnav">
+  <div class="bni">
+    <div class="bi active" onclick="go('dashboard')" id="b-dashboard"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Home</div>
+    <div class="bi" onclick="go('register')" id="b-register"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="16" y1="11" x2="22" y2="11"/></svg>Register</div>
+    <div class="bi" onclick="go('weighin')" id="b-weighin"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Weigh-in</div>
+    <div class="bi" onclick="go('progress')" id="b-progress"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Progress</div>
+    <div class="bi" onclick="go('leaderboard')" id="b-leaderboard"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="18 20 18 10"/><polyline points="12 20 12 4"/><polyline points="6 20 6 14"/></svg>Ranks</div>
+  </div>
+</nav>
+
+<div class="moverlay" id="mov" onclick="closeMenu()">
+  <div class="mpanel" onclick="event.stopPropagation()">
+    <div class="nlabel" style="padding:16px 16px 8px;">Programme</div>
+    <div class="ni active" onclick="go('dashboard');closeMenu()" id="m-dashboard"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</div>
+    <div class="ni" onclick="go('register');closeMenu()" id="m-register"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="16" y1="11" x2="22" y2="11"/></svg>Register</div>
+    <div class="ni" onclick="go('weighin');closeMenu()" id="m-weighin"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Weigh-in</div>
+    <div class="ni" onclick="go('progress');closeMenu()" id="m-progress"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>My progress</div>
+    <div class="ni" onclick="go('leaderboard');closeMenu()" id="m-leaderboard"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="18 20 18 10"/><polyline points="12 20 12 4"/><polyline points="6 20 6 14"/></svg>Leaderboard</div>
+    <div class="ni" onclick="go('export');closeMenu()" id="m-export"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export</div>
+    <div class="ni" onclick="go('admin');closeMenu()" id="m-admin"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0 1 12 0v2"/><line x1="18" y1="8" x2="22" y2="8"/><line x1="20" y1="6" x2="20" y2="10"/></svg>Admin</div>
+    <div class="mclose" onclick="closeMenu()">&#10005; Close</div>
+  </div>
+</div>
+
+<!-- App logic - no blocking external scripts -->
+<script>
+var P = {}, W = {}, pchart = null;
+var DIVS = ['Executives','Tourism Department','Na Vualiku (CPMU)','Civil Aviation Department','Corporate Services','Finance and Transport Department'];
+var MED = ['🥇','🥈','🥉'];
+var fbReady = false;
+
+// Navigation - works immediately, no Firebase needed
+function go(name) {
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});
+  document.querySelectorAll('.ni,.bi').forEach(function(n){n.classList.remove('active')});
+  var pg = document.getElementById('p-'+name);
+  if(pg) pg.classList.add('active');
+  ['n-','b-','m-'].forEach(function(pfx){var el=document.getElementById(pfx+name);if(el)el.classList.add('active')});
+  if(name==='dashboard') renderDash();
+
+// ---- ADMIN ----
+var adminUnlocked = false;
+var editKey = null;
+
+function checkAdmin(){
+  var name = document.getElementById('adm-who').value;
+  var pw = document.getElementById('admpw').value;
+  if(!name){alert2('adma','Please select your name.','i');return;}
+  if(!pw){alert2('adma','Please enter your password.','i');return;}
+  var ok = false;
+  if(name==='Max Rayawa' && pw==='1234') ok=true;
+  if(name==='Louise Shackley' && pw==='4567') ok=true;
+  if(!ok){alert2('adma','Incorrect password. Please try again.','i');document.getElementById('admpw').value='';return;}
+  adminUnlocked = true;
+  document.getElementById('admin-gate').style.display='none';
+  document.getElementById('admin-content').style.display='block';
+  fillAdminSel();
+  renderAdminTable();
+}
+
+function adminLogout(){
+  adminUnlocked = false;
+  editKey = null;
+  document.getElementById('admin-gate').style.display='block';
+  document.getElementById('admin-content').style.display='none';
+  document.getElementById('admpw').value='';
+  document.getElementById('adm-who').value='';
+  document.getElementById('adm-form').style.display='none';
+  document.getElementById('adm-sel').value='';
+}
+
+function fillAdminSel(){
+  var sel=document.getElementById('adm-sel');
+  sel.innerHTML='<option value="">Select participant</option>';
+  Object.entries(P).sort(function(a,b){return a[1].name.localeCompare(b[1].name)}).forEach(function(kv){
+    sel.innerHTML+='<option value="'+kv[0]+'">'+kv[1].name+'</option>';
+  });
+}
+
+function loadAdminEdit(){
+  var key=document.getElementById('adm-sel').value;
+  if(!key){document.getElementById('adm-form').style.display='none';return;}
+  var p=P[key];
+  if(!p) return;
+  editKey=key;
+  document.getElementById('adm-name').value=p.name;
+  document.getElementById('adm-div').value=p.dept;
+  document.getElementById('adm-h').value=p.height;
+  document.getElementById('adm-w').value=p.baseline;
+  document.getElementById('adm-form').style.display='block';
+  document.getElementById('adm-alert').innerHTML='';
+}
+
+function saveAdminEdit(){
+  if(!editKey) return;
+  var name=document.getElementById('adm-name').value.trim();
+  var dept=document.getElementById('adm-div').value;
+  var h=parseFloat(document.getElementById('adm-h').value);
+  var w=parseFloat(document.getElementById('adm-w').value);
+  if(!name||!dept||!h||!w){alert2('adm-alert','Please complete all fields.','i');return;}
+  var p=P[editKey];
+  var b=+(w/((h/100)*(h/100))).toFixed(1);
+  var cats=[{t:18.5,l:'Underweight',c:'bu'},{t:25,l:'Healthy',c:'bn'},{t:30,l:'Overweight',c:'bo'},{t:999,l:'Obese',c:'bb'}];
+  var cat=cats.find(function(x){return b<x.t});
+  var oldName=p.name;
+  setStat('sync');
+  window._fbdb.ref('participants/'+editKey).update({name:name,dept:dept,height:h,baseline:w,bmi:b,bmiL:cat.l,bmiC:cat.c}).then(function(){
+    if(oldName!==name){
+      var updates={};
+      Object.entries(W).forEach(function(kv){if(kv[1].name===oldName)updates['weighins/'+kv[0]+'/name']=name;});
+      if(Object.keys(updates).length) return window._fbdb.ref().update(updates);
+    }
+  }).then(function(){
+    setStat('');
+    alert2('adm-alert',name+' updated successfully.','s');
+    document.getElementById('adm-sel').value='';
+    document.getElementById('adm-form').style.display='none';
+    editKey=null;
+  });
+}
+
+function adminDelete(){
+  if(!editKey) return;
+  var p=P[editKey];
+  if(!confirm('Delete '+p.name+' and all their weigh-in records? This cannot be undone.')) return;
+  setStat('sync');
+  window._fbdb.ref('participants/'+editKey).remove();
+  Object.entries(W).forEach(function(kv){if(kv[1].name===p.name)window._fbdb.ref('weighins/'+kv[0]).remove();});
+  setStat('');
+  document.getElementById('adm-form').style.display='none';
+  document.getElementById('adm-sel').value='';
+  editKey=null;
+}
+
+function renderAdminTable(){
+  var el=document.getElementById('adm-table');
+  var list=Object.entries(P);
+  if(!list.length){el.innerHTML='<div class="empty"><strong>No participants yet</strong></div>';return;}
+  var h='<table><thead><tr><th>Name</th><th>Division</th><th>Height</th><th>Baseline</th><th>Weigh-ins</th></tr></thead><tbody>';
+  list.sort(function(a,b){return a[1].name.localeCompare(b[1].name)}).forEach(function(kv){
+    var p=kv[1];
+    var wks=Object.values(W).filter(function(w){return w.name===p.name}).length;
+    h+='<tr><td><strong>'+p.name+'</strong></td><td style="font-size:12px;color:var(--muted);">'+p.dept+'</td><td>'+p.height+' cm</td><td>'+p.baseline+' kg</td><td>'+wks+'</td></tr>';
+  });
+  h+='</tbody></table>';
+  el.innerHTML=h;
+}
+
+  if(name==='register') renderRegTable();
+  if(name==='weighin'){fillSel('wn');renderWR();}
+  if(name==='progress'){fillSel('ps');if(!unlockedUser){document.getElementById('pin-gate').style.display='block';document.getElementById('pc').style.display='none';document.getElementById('pin-logout').style.display='none';}}
+  if(name==='leaderboard') renderLB();
+  if(name==='export') renderExport();
+  if(name==='admin'){if(adminUnlocked){fillAdminSel();renderAdminTable();}}
+  window.scrollTo(0,0);
+}
+
+function openMenu(){document.getElementById('mov').style.display='block'}
+function closeMenu(){document.getElementById('mov').style.display='none'}
+
+// Alerts
+function alert2(id,msg,type){
+  var el=document.getElementById(id);
+  el.innerHTML='<div class="alert al-'+type+'">'+msg+'</div>';
+  setTimeout(function(){el.innerHTML=''},5000);
+}
+
+// Helpers
+function bmi(w,h){return w/((h/100)*(h/100))}
+function bmiCat(b){
+  if(b<18.5)return{l:'Underweight',c:'bu'};
+  if(b<25)return{l:'Healthy',c:'bn'};
+  if(b<30)return{l:'Overweight',c:'bo'};
+  return{l:'Obese',c:'bb'};
+}
+function ini(n){return n.split(' ').map(function(x){return x[0]}).join('').slice(0,2).toUpperCase()}
+function fmt(n,d){d=d||1;return Number(n).toFixed(d)}
+function cc(n){return n<0?'pos':n>0?'neg':'muted'}
+function ca(n){return n<0?'&#9660;':n>0?'&#9650;':'&mdash;'}
+function pwi(name){return Object.values(W).filter(function(w){return w.name===name}).sort(function(a,b){return a.week-b.week})}
+function lat(name){var r=pwi(name);return r.length?r[r.length-1]:null}
+
+function setStat(state){
+  var d=document.getElementById('sdot'),l=document.getElementById('slabel');
+  d.className='sdot'+(state==='sync'?' sync':state==='off'?' off':'');
+  l.textContent=state==='sync'?'Syncing':state==='off'?'Offline':'Live';
+}
+
+// Refresh current page when data updates
+function refresh(){
+  var a=document.querySelector('.page.active');
+  if(!a) return;
+  var name=a.id.replace('p-','');
+  if(name==='dashboard') renderDash();
+  if(name==='register') renderRegTable();
+  if(name==='weighin'){fillSel('wn');renderWR();}
+  if(name==='progress'){fillSel('ps');if(!unlockedUser){document.getElementById('pin-gate').style.display='block';document.getElementById('pc').style.display='none';document.getElementById('pin-logout').style.display='none';}}
+  if(name==='leaderboard') renderLB();
+  if(name==='export') renderExport();
+  if(name==='admin'){if(adminUnlocked){fillAdminSel();renderAdminTable();}}
+}
+
+// ---- REGISTER ----
+function doRegister(){
+  var name=document.getElementById('rn').value.trim();
+  var dept=document.getElementById('rd').value;
+  var h=parseFloat(document.getElementById('rh').value);
+  var w=parseFloat(document.getElementById('rw').value);
+  var wit=document.getElementById('rwit').value.trim();
+  var pin=document.getElementById('rpin').value.trim();
+  if(!name||!dept||!h||!w||!wit||!pin){alert2('ra','Please complete all fields including your PIN.','i');return}
+  if(pin.length!==4||!/^\d{4}$/.test(pin)){alert2('ra','PIN must be exactly 4 digits.','i');return}
+  if(Object.values(P).find(function(p){return p.name.toLowerCase()===name.toLowerCase()})){alert2('ra',name+' is already registered.','i');return}
+  var b=+fmt(bmi(w,h));
+  var cat=bmiCat(b);
+  var data={name:name,dept:dept,height:h,baseline:w,bmi:b,bmiL:cat.l,bmiC:cat.c,witness:wit,pin:pin,regDate:new Date().toLocaleDateString('en-FJ'),ts:Date.now()};
+  if(fbReady){
+    setStat('sync');
+    window._fbdb.ref('participants').push(data).then(function(){
+      setStat('');
+      ['rn','rh','rw','rwit','rpin'].forEach(function(id){document.getElementById(id).value=''});
+      document.getElementById('rd').value='';
+      alert2('ra',name+' registered successfully!','s');
+    });
+  } else {
+    alert2('ra','Not connected to database yet. Please wait and try again.','i');
+  }
+}
+
+function renderRegTable(){
+  var el=document.getElementById('rt');
+  var list=Object.entries(P);
+  if(!list.length){el.innerHTML='<div class="empty"><strong>No participants yet</strong>Be the first to register above.</div>';return}
+  var h='<table><thead><tr><th></th><th>Name</th><th>Division</th><th>Registered</th><th></th></tr></thead><tbody>';
+  list.forEach(function(kv){
+    var k=kv[0],p=kv[1];
+    h+='<tr><td><div class="av" style="width:29px;height:29px;font-size:11px;">'+ini(p.name)+'</div></td>';
+    h+='<td><strong>'+p.name+'</strong></td>';
+    h+='<td class="muted" style="font-size:12px;">'+p.dept+'</td>';
+    h+='<td class="muted" style="font-size:12px;">'+p.regDate+'</td>';
+    h+='<td><button class="btn btnd btnsm" onclick="delP(\''+k+'\',\''+p.name+'\')">Remove</button></td></tr>';
+  });
+  h+='</tbody></table>';
+  el.innerHTML=h;
+}
+
+function delP(key,name){
+  if(!confirm('Remove '+name+' and all weigh-in records?')) return;
+  setStat('sync');
+  window._fbdb.ref('participants/'+key).remove();
+  Object.entries(W).forEach(function(kv){if(kv[1].name===name)window._fbdb.ref('weighins/'+kv[0]).remove()});
+  setStat('');
+}
+
+// ---- WEIGH-IN ----
+function fillSel(id){
+  var sel=document.getElementById(id);
+  var cur=sel.value;
+  sel.innerHTML='<option value="">Select your name</option>';
+  Object.values(P).sort(function(a,b){return a.name.localeCompare(b.name)}).forEach(function(p){
+    sel.innerHTML+='<option'+(p.name===cur?' selected':'')+'>'+p.name+'</option>';
+  });
+}
+
+function doWeighIn(){
+  var name=document.getElementById('wn').value;
+  var w=parseFloat(document.getElementById('ww').value);
+  var wit=document.getElementById('wwit').value.trim();
+  if(!name||!w||!wit){alert2('wa','Please complete all fields.','i');return}
+  var p=Object.values(P).find(function(x){return x.name===name});
+  if(!p) return;
+  var prev=pwi(name);
+  var lastW=prev.length?prev[prev.length-1].weight:p.baseline;
+  var week=prev.length+1;
+  var change=+fmt(w-lastW);
+  var total=+fmt(w-p.baseline);
+  var pct=+fmt((total/p.baseline)*100,2);
+  var newBMI=+fmt(bmi(w,p.height));
+  if(fbReady){
+    setStat('sync');
+    window._fbdb.ref('weighins').push({name:name,weight:w,change:change,total:total,pct:pct,bmi:newBMI,witness:wit,week:week,date:new Date().toLocaleDateString('en-FJ'),ts:Date.now()}).then(function(){
+      setStat('');
+      document.getElementById('ww').value='';
+      document.getElementById('wwit').value='';
+      alert2('wa','Week '+week+' weigh-in recorded for '+name+'.','s');
+    });
+  } else {
+    alert2('wa','Not connected yet. Please wait and try again.','i');
+  }
+}
+
+function renderWR(){
+  var el=document.getElementById('wr');
+  var list=Object.values(W).sort(function(a,b){return b.ts-a.ts}).slice(0,15);
+  if(!list.length){el.innerHTML='<div class="empty"><strong>No weigh-ins yet</strong>Record the first entry above.</div>';return}
+  var h='<table><thead><tr><th>Name</th><th>Wk</th><th>Change</th><th>Witness</th></tr></thead><tbody>';
+  list.forEach(function(w){
+    h+='<tr><td><strong>'+w.name+'</strong></td><td>'+w.week+'</td>';
+    h+='<td class="'+cc(w.change)+'">'+ca(w.change)+' '+Math.abs(w.change)+' kg</td>';
+    h+='<td><span class="wtag">'+w.witness+'</span></td></tr>';
+  });
+  h+='</tbody></table>';
+  el.innerHTML=h;
+}
+
+// ---- PROGRESS PIN GATE ----
+var unlockedUser = null;
+
+function checkPIN(){
+  var name=document.getElementById('ps').value;
+  var pin=document.getElementById('pinentry').value.trim();
+  if(!name){alert2('pina','Please select your name.','i');return}
+  if(!pin){alert2('pina','Please enter your PIN.','i');return}
+  var p=Object.values(P).find(function(x){return x.name===name});
+  if(!p){alert2('pina','Participant not found.','i');return}
+  if(p.pin!==pin){alert2('pina','Incorrect PIN. Please try again.','i');document.getElementById('pinentry').value='';return}
+  unlockedUser=name;
+  document.getElementById('pin-gate').style.display='none';
+  document.getElementById('pc').style.display='block';
+  document.getElementById('pin-logout').style.display='block';
+  renderProgress();
+}
+
+function lockProgress(){
+  unlockedUser=null;
+  document.getElementById('pin-gate').style.display='block';
+  document.getElementById('pc').style.display='none';
+  document.getElementById('pin-logout').style.display='none';
+  document.getElementById('pinentry').value='';
+  document.getElementById('ps').value='';
+  document.getElementById('pc').innerHTML='';
+}
+
+// ---- PROGRESS ----
+function renderProgress(){
+  var name=unlockedUser;
+  var el=document.getElementById('pc');
+  if(!name){el.innerHTML='<div class="empty"><strong>Not unlocked</strong></div>';return}
+  var p=Object.values(P).find(function(x){return x.name===name});
+  if(!p) return;
+  var recs=pwi(name);
+  var latest=recs.length?recs[recs.length-1]:null;
+  var curW=latest?latest.weight:p.baseline;
+  var curBMI=latest?latest.bmi:p.bmi;
+  var total=latest?latest.total:0;
+  var pct=latest?latest.pct:0;
+  var cat=bmiCat(curBMI);
+  var gk=+fmt(p.baseline*0.05);
+  var gp=total<0?Math.min(100,Math.round((Math.abs(total)/gk)*100)):0;
+
+  var h='<div class="card"><div class="ph"><div class="av">'+ini(name)+'</div><div><p style="font-weight:700;font-size:16px;">'+name+'</p><p class="muted" style="font-size:13px;">'+p.dept+'</p></div></div>';
+  h+='<div class="srow">';
+  h+='<div class="sbox"><div class="slbl">Current</div><div class="sval">'+curW+'<span class="sunit"> kg</span></div></div>';
+  h+='<div class="sbox"><div class="slbl">Baseline</div><div class="sval">'+p.baseline+'<span class="sunit"> kg</span></div></div>';
+  h+='<div class="sbox"><div class="slbl">Change</div><div class="sval '+cc(total)+'">'+(total>0?'+':'')+total+'<span class="sunit"> kg</span></div></div>';
+  h+='<div class="sbox"><div class="slbl">% change</div><div class="sval '+cc(pct)+'">'+(pct>0?'+':'')+pct+'<span class="sunit">%</span></div></div>';
+  h+='<div class="sbox"><div class="slbl">BMI</div><div class="sval">'+curBMI+'</div><div style="margin-top:4px;"><span class="badge '+cat.c+'">'+cat.l+'</span></div></div>';
+  h+='<div class="sbox"><div class="slbl">Weeks</div><div class="sval">'+recs.length+'</div></div>';
+  h+='</div><hr>';
+  h+='<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;"><span class="muted">5% goal (&minus;'+gk+' kg)</span><span style="font-weight:700;">'+gp+'%</span></div>';
+  h+='<div class="pw"><div class="pf'+(gp>=100?' gold':'')+'" style="width:'+gp+'%;"></div></div>';
+  if(gp>=100) h+='<p style="font-size:12px;color:var(--success);margin-top:4px;">&#127881; 5% goal achieved!</p>';
+  h+='</div>';
+
+  if(recs.length>=2){
+    h+='<div class="card"><div class="ctitle"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:15px;height:15px;color:var(--gold);"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Weight trend</div><div class="chartbox"><canvas id="pc2" height="180"></canvas></div></div>';
+  } else if(!recs.length){
+    h+='<div class="card"><p class="muted" style="font-size:13px;">No weigh-ins yet. Go to the Weigh-in tab to log your first entry.</p></div>';
+  }
+
+  if(recs.length){
+    h+='<div class="card"><div class="ctitle"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:15px;height:15px;color:var(--gold);"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>History</div>';
+    h+='<div class="tw"><table><thead><tr><th>Wk</th><th>Date</th><th>Weight</th><th>Change</th><th>Total</th><th>%</th><th>Witness</th></tr></thead><tbody>';
+    recs.forEach(function(w){
+      h+='<tr><td>'+w.week+'</td><td class="muted">'+w.date+'</td><td>'+w.weight+'</td>';
+      h+='<td class="'+cc(w.change)+'">'+(w.change>0?'+':'')+w.change+'</td>';
+      h+='<td class="'+cc(w.total)+'">'+(w.total>0?'+':'')+w.total+'</td>';
+      h+='<td class="'+cc(w.pct)+'">'+(w.pct>0?'+':'')+w.pct+'%</td>';
+      h+='<td><span class="wtag">'+w.witness+'</span></td></tr>';
+    });
+    h+='</tbody></table></div></div>';
+  }
+
+  el.innerHTML=h;
+
+  if(recs.length>=2 && typeof Chart!=='undefined'){
+    var labels=['Baseline'].concat(recs.map(function(r){return'Wk '+r.week}));
+    var data=[p.baseline].concat(recs.map(function(r){return r.weight}));
+    if(pchart){pchart.destroy();pchart=null}
+    var ctx=document.getElementById('pc2').getContext('2d');
+    pchart=new Chart(ctx,{type:'line',data:{labels:labels,datasets:[{label:'Weight (kg)',data:data,borderColor:'#002060',backgroundColor:'rgba(0,32,96,.07)',borderWidth:2,pointBackgroundColor:'#C8A84B',pointRadius:5,tension:.3,fill:true}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.parsed.y.toFixed(1)+' kg'}}}},scales:{y:{ticks:{callback:function(v){return v+' kg'},font:{size:11}},grid:{color:'rgba(0,0,0,.05)'}},x:{ticks:{font:{size:11}},grid:{display:false}}}}});
+  }
+}
+
+// ---- LEADERBOARD ----
+function renderLB(){
+  var el=document.getElementById('lb');
+  var ranked=Object.values(P).map(function(p){return{p:p,l:lat(p.name)}}).filter(function(x){return x.l}).sort(function(a,b){return a.l.pct-b.l.pct});
+  var cons=Object.values(P).map(function(p){return{p:p,wks:pwi(p.name).length}}).filter(function(x){return x.wks>0}).sort(function(a,b){return b.wks-a.wks});
+  var dm={};DIVS.forEach(function(d){dm[d]={t:0,c:0}});
+  ranked.forEach(function(r){if(dm[r.p.dept]){dm[r.p.dept].t+=r.l.pct;dm[r.p.dept].c++}});
+  var dr=Object.entries(dm).filter(function(e){return e[1].c>0}).map(function(e){return{d:e[0],avg:+(e[1].t/e[1].c).toFixed(2)}}).sort(function(a,b){return a.avg-b.avg});
+
+  if(!ranked.length){el.innerHTML='<div class="empty"><strong>No data yet</strong>Register and record weigh-ins to see rankings.</div>';return}
+
+  var h='<div class="card"><div class="ctitle"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:15px;height:15px;color:var(--gold);"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>Top performers &mdash; % change</div>';
+  h+='<div class="tw"><table><thead><tr><th></th><th>Name</th><th>% change</th><th>kg lost</th></tr></thead><tbody>';
+  ranked.slice(0,10).forEach(function(r,i){
+    var m=i<3?'<span class="lbm">'+MED[i]+'</span>':'<span class="lbr">'+(i+1)+'</span>';
+    h+='<tr><td style="text-align:center;">'+m+'</td><td><strong>'+r.p.name+'</strong><br><span class="muted" style="font-size:11px;">'+r.p.dept+'</span></td>';
+    h+='<td class="'+cc(r.l.pct)+'">'+(r.l.pct>0?'+':'')+r.l.pct+'%</td>';
+    h+='<td class="'+cc(r.l.total)+'">'+(r.l.total<0?fmt(Math.abs(r.l.total))+' kg':'&mdash;')+'</td></tr>';
+  });
+  h+='</tbody></table></div></div>';
+
+  h+='<div class="card"><div class="ctitle"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:15px;height:15px;color:var(--gold);"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Consistency &mdash; weeks logged</div>';
+  h+='<div class="tw"><table><thead><tr><th></th><th>Name</th><th>Weeks</th></tr></thead><tbody>';
+  cons.slice(0,10).forEach(function(r,i){
+    var m=i<3?'<span class="lbm">'+MED[i]+'</span>':'<span class="lbr">'+(i+1)+'</span>';
+    h+='<tr><td style="text-align:center;">'+m+'</td><td><strong>'+r.p.name+'</strong><br><span class="muted" style="font-size:11px;">'+r.p.dept+'</span></td><td>'+r.wks+'</td></tr>';
+  });
+  h+='</tbody></table></div></div>';
+
+  if(dr.length){
+    h+='<div class="card"><div class="ctitle"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:15px;height:15px;color:var(--gold);"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>Division standings</div>';
+    h+='<div class="tw"><table><thead><tr><th></th><th>Division</th><th>Avg %</th></tr></thead><tbody>';
+    dr.forEach(function(d,i){
+      var m=i<3?'<span class="lbm">'+MED[i]+'</span>':'<span class="lbr">'+(i+1)+'</span>';
+      h+='<tr><td style="text-align:center;">'+m+'</td><td>'+d.d+'</td><td class="'+cc(d.avg)+'">'+(d.avg>0?'+':'')+d.avg+'%</td></tr>';
+    });
+    h+='</tbody></table></div></div>';
+  }
+  h+='<div class="alert al-i" style="font-size:13px;">&#128274; Individual weights are never shown here.</div>';
+  el.innerHTML=h;
+}
+
+// ---- DASHBOARD ----
+function renderDash(){
+  var pl=Object.values(P),wl=Object.values(W);
+  var active=[...new Set(wl.map(function(w){return w.name}))].length;
+  var losing=pl.filter(function(p){var l=lat(p.name);return l&&l.total<0}).length;
+  document.getElementById('ds1').textContent=pl.length;
+  document.getElementById('ds2').textContent=active;
+  document.getElementById('ds3').textContent=wl.length;
+  document.getElementById('ds4').textContent=losing;
+  var dd=document.getElementById('dd');
+  if(!pl.length){dd.innerHTML='<div class="empty" style="padding:10px 0;">No participants yet.</div>';}
+  else{
+    var h='';
+    DIVS.forEach(function(d){
+      var c=pl.filter(function(p){return p.dept===d}).length;
+      if(!c) return;
+      var pct=Math.round((c/pl.length)*100);
+      h+='<div style="margin-bottom:11px;"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:3px;"><span>'+d+'</span><span class="muted">'+c+'</span></div><div class="pw"><div class="pf" style="width:'+pct+'%;"></div></div></div>';
+    });
+    dd.innerHTML=h;
+  }
+  var dr=document.getElementById('dr');
+  var rec=wl.sort(function(a,b){return b.ts-a.ts}).slice(0,5);
+  if(!rec.length){dr.innerHTML='<div class="empty" style="padding:10px 0;">No weigh-ins recorded yet.</div>';}
+  else{
+    var h2='<table><thead><tr><th>Name</th><th>Week</th><th>Date</th><th>Change</th></tr></thead><tbody>';
+    rec.forEach(function(w){h2+='<tr><td><strong>'+w.name+'</strong></td><td>Wk '+w.week+'</td><td class="muted">'+w.date+'</td><td class="'+cc(w.change)+'">'+ca(w.change)+' '+Math.abs(w.change)+' kg</td></tr>'});
+    h2+='</tbody></table>';
+    dr.innerHTML=h2;
+  }
+}
+
+// ---- EXPORT ----
+function renderExport(){
+  document.getElementById('es').innerHTML='Participants: <strong>'+Object.keys(P).length+'</strong> &nbsp;&middot;&nbsp; Weigh-ins: <strong>'+Object.keys(W).length+'</strong>';
+}
+
+function doExport(type){
+  var csv='',fn='';
+  if(type==='participants'){
+    fn='MTCA_Wellness_Registrations.csv';
+    csv='Name,Division,Height (cm),Baseline (kg),BMI,BMI Category,Witness,Date\n';
+    Object.values(P).forEach(function(p){csv+=[p.name,p.dept,p.height,p.baseline,p.bmi,p.bmiL,p.witness,p.regDate].map(function(v){return'"'+v+'"'}).join(',')+'\n'});
+  } else {
+    fn='MTCA_Wellness_WeighIns.csv';
+    csv='Name,Week,Date,Weight (kg),Change,Total,% Change,BMI,Witness\n';
+    Object.values(W).sort(function(a,b){return a.ts-b.ts}).forEach(function(w){csv+=[w.name,w.week,w.date,w.weight,w.change,w.total,w.pct,w.bmi,w.witness].map(function(v){return'"'+v+'"'}).join(',')+'\n'});
+  }
+  var b=new Blob([csv],{type:'text/csv'});
+  var u=URL.createObjectURL(b);
+  var a=document.createElement('a');a.href=u;a.download=fn;a.click();
+  URL.revokeObjectURL(u);
+}
+
+// Render dashboard immediately on load
+renderDash();
+
+// Load Firebase and Chart.js asynchronously after app is ready
+function loadScript(src, cb){
+  var s=document.createElement('script');
+  s.src=src;
+  s.onload=cb;
+  s.onerror=function(){console.warn('Failed to load: '+src)};
+  document.head.appendChild(s);
+}
+
+// Load Chart.js first, then Firebase
+loadScript('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js', function(){
+  loadScript('https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js', function(){
+    loadScript('https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js', function(){
+      try {
+        firebase.initializeApp({
+          apiKey:"AIzaSyBbTBE4wvnHnH_vnK20Pc1jNAE65nPWVhw",
+          authDomain:"mtca-wellness.firebaseapp.com",
+          databaseURL:"https://mtca-wellness-default-rtdb.firebaseio.com",
+          projectId:"mtca-wellness",
+          storageBucket:"mtca-wellness.firebasestorage.app",
+          messagingSenderId:"568169511647",
+          appId:"1:568169511647:web:34c4b64f9e1ac78ad0876a"
+        });
+        window._fbdb = firebase.database();
+        fbReady = true;
+        document.getElementById('syncbar').style.display='none';
+
+        window._fbdb.ref('participants').on('value', function(snap){
+          P = snap.val() || {};
+          setStat('');
+          refresh();
+        }, function(){ setStat('off'); });
+
+        window._fbdb.ref('weighins').on('value', function(snap){
+          W = snap.val() || {};
+          refresh();
+        });
+      } catch(e){
+        setStat('off');
+        document.getElementById('syncbar').style.display='none';
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>
