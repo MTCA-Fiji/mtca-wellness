@@ -287,6 +287,115 @@ function go(name) {
   if(pg) pg.classList.add('active');
   ['n-','b-','m-'].forEach(function(pfx){var el=document.getElementById(pfx+name);if(el)el.classList.add('active')});
   if(name==='dashboard') renderDash();
+
+// ---- ADMIN ----
+var adminUnlocked = false;
+var editKey = null;
+
+function checkAdmin(){
+  var name = document.getElementById('adm-who').value;
+  var pw = document.getElementById('admpw').value;
+  if(!name){alert2('adma','Please select your name.','i');return;}
+  if(!pw){alert2('adma','Please enter your password.','i');return;}
+  var ok = false;
+  if(name==='Max Rayawa' && pw==='1234') ok=true;
+  if(name==='Louise Shackley' && pw==='4567') ok=true;
+  if(!ok){alert2('adma','Incorrect password. Please try again.','i');document.getElementById('admpw').value='';return;}
+  adminUnlocked = true;
+  document.getElementById('admin-gate').style.display='none';
+  document.getElementById('admin-content').style.display='block';
+  fillAdminSel();
+  renderAdminTable();
+}
+
+function adminLogout(){
+  adminUnlocked = false;
+  editKey = null;
+  document.getElementById('admin-gate').style.display='block';
+  document.getElementById('admin-content').style.display='none';
+  document.getElementById('admpw').value='';
+  document.getElementById('adm-who').value='';
+  document.getElementById('adm-form').style.display='none';
+  document.getElementById('adm-sel').value='';
+}
+
+function fillAdminSel(){
+  var sel=document.getElementById('adm-sel');
+  sel.innerHTML='<option value="">Select participant</option>';
+  Object.entries(P).sort(function(a,b){return a[1].name.localeCompare(b[1].name)}).forEach(function(kv){
+    sel.innerHTML+='<option value="'+kv[0]+'">'+kv[1].name+'</option>';
+  });
+}
+
+function loadAdminEdit(){
+  var key=document.getElementById('adm-sel').value;
+  if(!key){document.getElementById('adm-form').style.display='none';return;}
+  var p=P[key];
+  if(!p) return;
+  editKey=key;
+  document.getElementById('adm-name').value=p.name;
+  document.getElementById('adm-div').value=p.dept;
+  document.getElementById('adm-h').value=p.height;
+  document.getElementById('adm-w').value=p.baseline;
+  document.getElementById('adm-form').style.display='block';
+  document.getElementById('adm-alert').innerHTML='';
+}
+
+function saveAdminEdit(){
+  if(!editKey) return;
+  var name=document.getElementById('adm-name').value.trim();
+  var dept=document.getElementById('adm-div').value;
+  var h=parseFloat(document.getElementById('adm-h').value);
+  var w=parseFloat(document.getElementById('adm-w').value);
+  if(!name||!dept||!h||!w){alert2('adm-alert','Please complete all fields.','i');return;}
+  var p=P[editKey];
+  var b=+(w/((h/100)*(h/100))).toFixed(1);
+  var cats=[{t:18.5,l:'Underweight',c:'bu'},{t:25,l:'Healthy',c:'bn'},{t:30,l:'Overweight',c:'bo'},{t:999,l:'Obese',c:'bb'}];
+  var cat=cats.find(function(x){return b<x.t});
+  var oldName=p.name;
+  setStat('sync');
+  window._fbdb.ref('participants/'+editKey).update({name:name,dept:dept,height:h,baseline:w,bmi:b,bmiL:cat.l,bmiC:cat.c}).then(function(){
+    if(oldName!==name){
+      var updates={};
+      Object.entries(W).forEach(function(kv){if(kv[1].name===oldName)updates['weighins/'+kv[0]+'/name']=name;});
+      if(Object.keys(updates).length) return window._fbdb.ref().update(updates);
+    }
+  }).then(function(){
+    setStat('');
+    alert2('adm-alert',name+' updated successfully.','s');
+    document.getElementById('adm-sel').value='';
+    document.getElementById('adm-form').style.display='none';
+    editKey=null;
+  });
+}
+
+function adminDelete(){
+  if(!editKey) return;
+  var p=P[editKey];
+  if(!confirm('Delete '+p.name+' and all their weigh-in records? This cannot be undone.')) return;
+  setStat('sync');
+  window._fbdb.ref('participants/'+editKey).remove();
+  Object.entries(W).forEach(function(kv){if(kv[1].name===p.name)window._fbdb.ref('weighins/'+kv[0]).remove();});
+  setStat('');
+  document.getElementById('adm-form').style.display='none';
+  document.getElementById('adm-sel').value='';
+  editKey=null;
+}
+
+function renderAdminTable(){
+  var el=document.getElementById('adm-table');
+  var list=Object.entries(P);
+  if(!list.length){el.innerHTML='<div class="empty"><strong>No participants yet</strong></div>';return;}
+  var h='<table><thead><tr><th>Name</th><th>Division</th><th>Height</th><th>Baseline</th><th>Weigh-ins</th></tr></thead><tbody>';
+  list.sort(function(a,b){return a[1].name.localeCompare(b[1].name)}).forEach(function(kv){
+    var p=kv[1];
+    var wks=Object.values(W).filter(function(w){return w.name===p.name}).length;
+    h+='<tr><td><strong>'+p.name+'</strong></td><td style="font-size:12px;color:var(--muted);">'+p.dept+'</td><td>'+p.height+' cm</td><td>'+p.baseline+' kg</td><td>'+wks+'</td></tr>';
+  });
+  h+='</tbody></table>';
+  el.innerHTML=h;
+}
+
   if(name==='register') renderRegTable();
   if(name==='weighin'){fillSel('wn');renderWR();}
   if(name==='progress'){fillSel('ps');if(!unlockedUser){document.getElementById('pin-gate').style.display='block';document.getElementById('pc').style.display='none';document.getElementById('pin-logout').style.display='none';}}
@@ -372,13 +481,12 @@ function renderRegTable(){
   var el=document.getElementById('rt');
   var list=Object.entries(P);
   if(!list.length){el.innerHTML='<div class="empty"><strong>No participants yet</strong>Be the first to register above.</div>';return}
-  var h='<table><thead><tr><th></th><th>Name</th><th>Division</th><th>BMI</th><th>Date</th><th></th></tr></thead><tbody>';
+  var h='<table><thead><tr><th></th><th>Name</th><th>Division</th><th>Registered</th><th></th></tr></thead><tbody>';
   list.forEach(function(kv){
     var k=kv[0],p=kv[1];
     h+='<tr><td><div class="av" style="width:29px;height:29px;font-size:11px;">'+ini(p.name)+'</div></td>';
     h+='<td><strong>'+p.name+'</strong></td>';
     h+='<td class="muted" style="font-size:12px;">'+p.dept+'</td>';
-    h+='<td>'+p.bmi+' <span class="badge '+p.bmiC+'">'+p.bmiL+'</span></td>';
     h+='<td class="muted" style="font-size:12px;">'+p.regDate+'</td>';
     h+='<td><button class="btn btnd btnsm" onclick="delP(\''+k+'\',\''+p.name+'\')">Remove</button></td></tr>';
   });
@@ -435,10 +543,10 @@ function renderWR(){
   var el=document.getElementById('wr');
   var list=Object.values(W).sort(function(a,b){return b.ts-a.ts}).slice(0,15);
   if(!list.length){el.innerHTML='<div class="empty"><strong>No weigh-ins yet</strong>Record the first entry above.</div>';return}
-  var h='<table><thead><tr><th>Name</th><th>Wk</th><th>Weight</th><th>Change</th><th>Witness</th></tr></thead><tbody>';
+  var h='<table><thead><tr><th>Name</th><th>Wk</th><th>Change</th><th>Witness</th></tr></thead><tbody>';
   list.forEach(function(w){
-    h+='<tr><td><strong>'+w.name+'</strong></td><td>'+w.week+'</td><td>'+w.weight+' kg</td>';
-    h+='<td class="'+cc(w.change)+'">'+ca(w.change)+' '+Math.abs(w.change)+'</td>';
+    h+='<tr><td><strong>'+w.name+'</strong></td><td>'+w.week+'</td>';
+    h+='<td class="'+cc(w.change)+'">'+ca(w.change)+' '+Math.abs(w.change)+' kg</td>';
     h+='<td><span class="wtag">'+w.witness+'</span></td></tr>';
   });
   h+='</tbody></table>';
