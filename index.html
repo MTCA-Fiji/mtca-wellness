@@ -5,829 +5,599 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MTCA Wellness Weight Challenge</title>
 <style>
-  :root {
-    --navy: #002060;
-    --navy-mid: #003087;
-    --navy-light: #e8eef7;
-    --gold: #C8A84B;
-    --gold-light: #fdf6e3;
-    --success: #1a7a4a;
-    --success-bg: #e6f4ec;
-    --warning: #7a5c00;
-    --warning-bg: #fff8e1;
-    --danger: #b32222;
-    --danger-bg: #fdeaea;
-    --info: #0d5fa3;
-    --info-bg: #e6f0fa;
-    --text: #1a1a2e;
-    --text-muted: #5a6278;
-    --border: #d0d8e8;
-    --bg: #f4f6fb;
-    --surface: #ffffff;
-    --radius: 10px;
-    --radius-sm: 6px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); font-size: 15px; min-height: 100vh; }
-
-  /* TOPBAR */
-  .topbar { background: var(--navy); color: #fff; padding: 0 20px; display: flex; align-items: center; gap: 14px; height: 56px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,32,96,0.18); }
-  .topbar-logo { width: 34px; height: 34px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; color: var(--navy); flex-shrink: 0; }
-  .topbar-title { font-size: 14px; font-weight: 600; }
-  .topbar-sub { font-size: 11px; color: rgba(255,255,255,0.55); margin-top: 1px; }
-  .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
-  .menu-btn { display: none; background: none; border: none; color: #fff; cursor: pointer; padding: 4px; }
-  .menu-btn svg { width: 24px; height: 24px; }
-  .mobile-menu { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; }
-  .mobile-menu-panel { position: absolute; top: 0; right: 0; bottom: 0; width: 220px; background: var(--surface); padding: 20px 0; box-shadow: -4px 0 20px rgba(0,0,0,0.15); overflow-y: auto; }
-  .mobile-menu-panel .nav-label { padding: 16px 20px 8px; }
-  .mobile-menu-panel .nav-item { border-left: none; border-right: 3px solid transparent; padding: 14px 20px; font-size: 15px; }
-  .mobile-menu-panel .nav-item.active { border-right-color: var(--navy); border-left: none; }
-  .mobile-menu-close { padding: 16px 20px; font-size: 13px; color: var(--text-muted); cursor: pointer; border-top: 1px solid var(--border); margin-top: 8px; }
-  @media (max-width: 640px) { .menu-btn { display: block; } }
-  .sync-dot { width: 8px; height: 8px; border-radius: 50%; background: #4caf50; flex-shrink: 0; }
-  .sync-dot.offline { background: #f44336; }
-  .sync-dot.syncing { background: var(--gold); animation: pulse 1s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-  .sync-label { font-size: 11px; color: rgba(255,255,255,0.6); }
-
-  /* BOTTOM NAV (mobile) */
-  .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-top: 2px solid var(--border); z-index: 9999; padding: 8px 0 60px; box-shadow: 0 -2px 12px rgba(0,0,0,0.10); }
-  .bottom-nav-items { display: flex; justify-content: space-around; }
-  .bn-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; padding: 6px 8px; color: var(--text-muted); font-size: 10px; font-weight: 600; letter-spacing: 0.3px; min-width: 56px; }
-  .bn-item svg { width: 24px; height: 24px; }
-  .bn-item.active { color: var(--navy); }
-  .bn-item.active svg { stroke: var(--navy); }
-
-  /* SIDEBAR (desktop) */
-  .layout { display: flex; min-height: calc(100vh - 56px); }
-  .sidebar { width: 190px; background: var(--surface); border-right: 1px solid var(--border); padding: 20px 0; flex-shrink: 0; }
-  .nav-label { font-size: 10px; font-weight: 700; letter-spacing: 1.2px; color: var(--text-muted); padding: 0 18px 8px; text-transform: uppercase; }
-  .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 18px; font-size: 14px; color: var(--text-muted); cursor: pointer; border-left: 3px solid transparent; }
-  .nav-item svg { width: 17px; height: 17px; flex-shrink: 0; }
-  .nav-item:hover { background: var(--navy-light); color: var(--navy); }
-  .nav-item.active { background: var(--navy-light); color: var(--navy); border-left-color: var(--navy); font-weight: 600; }
-
-  /* MAIN */
-  .main { flex: 1; padding: 24px 20px 80px; overflow-y: auto; max-width: 860px; }
-  .page { display: none; }
-  .page.active { display: block; }
-  .page-title { font-size: 19px; font-weight: 700; color: var(--navy); margin-bottom: 3px; }
-  .page-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
-
-  /* CARDS */
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 16px; }
-  .card-title { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
-  .card-title svg { width: 15px; height: 15px; color: var(--gold); flex-shrink: 0; }
-
-  /* STATS */
-  .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; margin-bottom: 16px; }
-  .stat-box { background: var(--bg); border-radius: var(--radius-sm); padding: 12px 14px; }
-  .stat-label { font-size: 10px; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .stat-val { font-size: 22px; font-weight: 700; color: var(--navy); line-height: 1; }
-  .stat-unit { font-size: 12px; font-weight: 400; color: var(--text-muted); }
-
-  /* FORMS */
-  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-  .form-grid.col1 { grid-template-columns: 1fr; }
-  .field label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; }
-  .field input, .field select { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 15px; color: var(--text); background: var(--surface); outline: none; -webkit-appearance: none; }
-  .field input:focus, .field select:focus { border-color: var(--navy); }
-  .btn { padding: 11px 20px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface); color: var(--text); font-size: 15px; cursor: pointer; font-weight: 600; width: 100%; }
-  .btn-primary { background: var(--navy); color: #fff; border-color: var(--navy); }
-  .btn-primary:active { background: #001848; }
-  .btn-danger { color: var(--danger); border-color: var(--danger-bg); background: var(--danger-bg); }
-  .btn-sm { padding: 7px 14px; font-size: 13px; width: auto; }
-
-  /* ALERTS */
-  .alert { border-radius: var(--radius-sm); padding: 10px 14px; font-size: 13px; margin-bottom: 12px; }
-  .alert-success { background: var(--success-bg); color: var(--success); border-left: 3px solid var(--success); }
-  .alert-info { background: var(--info-bg); color: var(--info); border-left: 3px solid var(--info); }
-  .alert-warn { background: var(--warning-bg); color: var(--warning); border-left: 3px solid var(--gold); }
-  .alert-danger { background: var(--danger-bg); color: var(--danger); border-left: 3px solid var(--danger); }
-
-  /* TABLES */
-  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th { text-align: left; padding: 8px 10px; border-bottom: 2px solid var(--border); color: var(--text-muted); font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; font-weight: 700; white-space: nowrap; }
-  td { padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-  tr:last-child td { border-bottom: none; }
-
-  /* BADGES */
-  .badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 99px; font-weight: 600; }
-  .badge-under { background: var(--info-bg); color: var(--info); }
-  .badge-normal { background: var(--success-bg); color: var(--success); }
-  .badge-over { background: var(--warning-bg); color: var(--warning); }
-  .badge-obese { background: var(--danger-bg); color: var(--danger); }
-
-  /* COLOURS */
-  .pos { color: var(--success); font-weight: 600; }
-  .neg { color: var(--danger); font-weight: 600; }
-  .muted { color: var(--text-muted); }
-
-  /* PROGRESS */
-  .prog-wrap { background: var(--bg); border-radius: 99px; height: 8px; overflow: hidden; margin: 4px 0; }
-  .prog-fill { height: 8px; border-radius: 99px; background: var(--navy); transition: width 0.5s; }
-  .prog-fill.gold { background: var(--gold); }
-
-  /* AVATAR */
-  .avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--navy); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
-
-  /* EMPTY */
-  .empty { text-align: center; padding: 28px 16px; color: var(--text-muted); font-size: 14px; }
-  .empty strong { display: block; font-size: 15px; color: var(--text); margin-bottom: 6px; }
-
-  /* LOADING OVERLAY */
-  #loading-overlay { position: fixed; inset: 0; background: var(--navy); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999; color: #fff; gap: 16px; }
-  #loading-overlay .logo { width: 60px; height: 60px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 20px; color: var(--navy); }
-  #loading-overlay p { font-size: 14px; color: rgba(255,255,255,0.7); }
-  .spinner { width: 28px; height: 28px; border: 3px solid rgba(255,255,255,0.2); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* CHART */
-  .chart-container { position: relative; margin: 8px 0; }
-  canvas { width: 100% !important; display: block; }
-
-  /* WITNESS TAG */
-  .witness-tag { font-size: 11px; background: var(--bg); color: var(--text-muted); padding: 2px 7px; border-radius: 99px; border: 1px solid var(--border); white-space: nowrap; }
-
-  /* NOTE */
-  .note { font-size: 12px; color: var(--text-muted); margin-top: 8px; line-height: 1.5; }
-
-  hr { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
-
-  /* PROFILE */
-  .profile-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-  .profile-header .avatar { width: 48px; height: 48px; font-size: 16px; }
-
-  /* LEADERBOARD */
-  .lb-medal { font-size: 17px; text-align: center; }
-  .lb-rank { font-size: 13px; font-weight: 700; color: var(--text-muted); text-align: center; }
-
-  /* RESPONSIVE */
-  @media (max-width: 640px) {
-    .sidebar { display: none; }
-    .bottom-nav { display: block; }
-    .main { padding: 16px 14px 160px; }
-    .form-grid { grid-template-columns: 1fr; }
-    .stat-row { grid-template-columns: 1fr 1fr; }
-    .topbar-sub { display: none; }
-  }
+:root{--navy:#002060;--gold:#C8A84B;--success:#1a7a4a;--success-bg:#e6f4ec;--warning:#7a5c00;--warning-bg:#fff8e1;--danger:#b32222;--danger-bg:#fdeaea;--info:#0d5fa3;--info-bg:#e6f0fa;--text:#1a1a2e;--muted:#5a6278;--border:#d0d8e8;--bg:#f4f6fb;--surface:#fff;--r:10px;--rs:6px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);font-size:15px}
+.topbar{background:var(--navy);color:#fff;padding:0 16px;display:flex;align-items:center;gap:12px;height:54px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,32,96,.2)}
+.tlogo{width:34px;height:34px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:var(--navy);flex-shrink:0}
+.ttitle{font-size:14px;font-weight:600}
+.tsub{font-size:11px;color:rgba(255,255,255,.5);margin-top:1px}
+.tright{margin-left:auto;display:flex;align-items:center;gap:8px}
+.sdot{width:8px;height:8px;border-radius:50%;background:#4caf50}
+.sdot.off{background:#f44336}.sdot.sync{background:var(--gold);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.slabel{font-size:11px;color:rgba(255,255,255,.55)}
+.mbtn{display:none;background:none;border:none;color:#fff;cursor:pointer;padding:4px}
+.mbtn svg{width:24px;height:24px}
+.layout{display:flex;min-height:calc(100vh - 54px)}
+.sidebar{width:188px;background:var(--surface);border-right:1px solid var(--border);padding:18px 0;flex-shrink:0}
+.nlabel{font-size:10px;font-weight:700;letter-spacing:1.2px;color:var(--muted);padding:0 16px 8px;text-transform:uppercase}
+.ni{display:flex;align-items:center;gap:10px;padding:10px 16px;font-size:14px;color:var(--muted);cursor:pointer;border-left:3px solid transparent}
+.ni svg{width:17px;height:17px;flex-shrink:0}
+.ni:hover{background:#e8eef7;color:var(--navy)}
+.ni.active{background:#e8eef7;color:var(--navy);border-left-color:var(--navy);font-weight:600}
+.main{flex:1;padding:22px 18px 100px;max-width:860px}
+.page{display:none}.page.active{display:block}
+.ptitle{font-size:19px;font-weight:700;color:var(--navy);margin-bottom:3px}
+.psub{font-size:13px;color:var(--muted);margin-bottom:18px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;margin-bottom:14px}
+.ctitle{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:12px;display:flex;align-items:center;gap:7px}
+.ctitle svg{width:15px;height:15px;color:var(--gold);flex-shrink:0}
+.srow{display:grid;grid-template-columns:repeat(auto-fit,minmax(108px,1fr));gap:10px;margin-bottom:14px}
+.sbox{background:var(--bg);border-radius:var(--rs);padding:12px 13px}
+.slbl{font-size:10px;color:var(--muted);margin-bottom:3px;text-transform:uppercase;letter-spacing:.5px}
+.sval{font-size:22px;font-weight:700;color:var(--navy);line-height:1}
+.sunit{font-size:12px;font-weight:400;color:var(--muted)}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:11px}
+.fg.c1{grid-template-columns:1fr}
+.field label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:4px}
+.field input,.field select{width:100%;padding:10px 11px;border:1px solid var(--border);border-radius:var(--rs);font-size:15px;color:var(--text);background:var(--surface);outline:none;-webkit-appearance:none}
+.field input:focus,.field select:focus{border-color:var(--navy)}
+.btn{padding:11px 18px;border-radius:var(--rs);border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:15px;cursor:pointer;font-weight:600;width:100%}
+.btnp{background:var(--navy);color:#fff;border-color:var(--navy)}
+.btnd{color:var(--danger);border-color:var(--danger-bg);background:var(--danger-bg)}
+.btnsm{padding:6px 13px;font-size:13px;width:auto}
+.alert{border-radius:var(--rs);padding:9px 13px;font-size:13px;margin-bottom:11px}
+.al-s{background:var(--success-bg);color:var(--success);border-left:3px solid var(--success)}
+.al-i{background:var(--info-bg);color:var(--info);border-left:3px solid var(--info)}
+.al-w{background:var(--warning-bg);color:var(--warning);border-left:3px solid var(--gold)}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:8px 9px;border-bottom:2px solid var(--border);color:var(--muted);font-size:11px;letter-spacing:.5px;text-transform:uppercase;font-weight:700;white-space:nowrap}
+td{padding:8px 9px;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:99px;font-weight:600}
+.bu{background:var(--info-bg);color:var(--info)}
+.bn{background:var(--success-bg);color:var(--success)}
+.bo{background:var(--warning-bg);color:var(--warning)}
+.bb{background:var(--danger-bg);color:var(--danger)}
+.pos{color:var(--success);font-weight:600}
+.neg{color:var(--danger);font-weight:600}
+.muted{color:var(--muted)}
+.pw{background:var(--bg);border-radius:99px;height:8px;overflow:hidden;margin:4px 0}
+.pf{height:8px;border-radius:99px;background:var(--navy);transition:width .5s}
+.pf.gold{background:var(--gold)}
+.av{width:34px;height:34px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.empty{text-align:center;padding:24px 12px;color:var(--muted);font-size:14px}
+.empty strong{display:block;font-size:15px;color:var(--text);margin-bottom:5px}
+.wtag{font-size:11px;background:var(--bg);color:var(--muted);padding:2px 7px;border-radius:99px;border:1px solid var(--border);white-space:nowrap}
+.note{font-size:12px;color:var(--muted);margin-top:7px;line-height:1.5}
+hr{border:none;border-top:1px solid var(--border);margin:13px 0}
+.ph{display:flex;align-items:center;gap:11px;margin-bottom:14px}
+.ph .av{width:46px;height:46px;font-size:15px}
+.lbm{font-size:17px;text-align:center}
+.lbr{font-size:13px;font-weight:700;color:var(--muted);text-align:center}
+.bnav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:2px solid var(--border);z-index:999;padding:6px 0 54px;box-shadow:0 -2px 10px rgba(0,0,0,.08)}
+.bni{display:flex;justify-content:space-around}
+.bi{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:5px 8px;color:var(--muted);font-size:10px;font-weight:600;min-width:54px}
+.bi svg{width:23px;height:23px}
+.bi.active{color:var(--navy)}
+.moverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300}
+.mpanel{position:absolute;top:0;right:0;bottom:0;width:210px;background:var(--surface);padding:18px 0;overflow-y:auto;box-shadow:-3px 0 16px rgba(0,0,0,.12)}
+.mclose{padding:14px 18px;font-size:13px;color:var(--muted);cursor:pointer;border-top:1px solid var(--border);margin-top:6px}
+.chartbox{position:relative;margin:6px 0}
+canvas{width:100%!important;display:block}
+#syncbar{display:none;position:fixed;top:54px;left:0;right:0;z-index:200;background:#003087;color:#fff;font-size:12px;text-align:center;padding:6px;letter-spacing:.3px}
+@media(max-width:640px){
+  .sidebar{display:none}
+  .bnav{display:block}
+  .mbtn{display:block}
+  .main{padding:16px 13px 140px}
+  .fg{grid-template-columns:1fr}
+  .srow{grid-template-columns:1fr 1fr}
+  .tsub{display:none}
+}
 </style>
 </head>
 <body>
 
-<!-- SLIM LOADING BANNER -->
-<div id="loading-overlay" style="display:none;position:fixed;top:56px;left:0;right:0;z-index:200;background:#003087;color:#fff;font-size:13px;text-align:center;padding:8px;letter-spacing:0.3px;">
-  <span style="opacity:0.8;">Connecting to database...</span>
-</div>
+<div id="syncbar">Connecting to database...</div>
 
-<!-- TOPBAR -->
 <div class="topbar">
-  <div class="topbar-logo">MT</div>
+  <div class="tlogo">MT</div>
   <div>
-    <div class="topbar-title">Wellness Weight Challenge</div>
-    <div class="topbar-sub">Ministry of Tourism &amp; Civil Aviation</div>
+    <div class="ttitle">Wellness Weight Challenge</div>
+    <div class="tsub">Ministry of Tourism &amp; Civil Aviation</div>
   </div>
-  <div class="topbar-right">
-    <div class="sync-dot syncing" id="sync-dot"></div>
-    <span class="sync-label" id="sync-label">Connecting...</span>
-    <button class="menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
+  <div class="tright">
+    <div class="sdot sync" id="sdot"></div>
+    <span class="slabel" id="slabel">Connecting</span>
+    <button class="mbtn" onclick="openMenu()" aria-label="Menu">
       <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
   </div>
 </div>
 
-<!-- MOBILE MENU OVERLAY -->
-<div class="mobile-menu" id="mobile-menu" onclick="closeMobileMenu()">
-  <div class="mobile-menu-panel" onclick="event.stopPropagation()">
-    <div class="nav-label">Programme</div>
-    <div class="nav-item active" onclick="showPageMobile('dashboard')" id="mnav-dashboard">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-      Dashboard
-    </div>
-    <div class="nav-item" onclick="showPageMobile('register')" id="mnav-register">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="16" y1="11" x2="22" y2="11"/></svg>
-      Register
-    </div>
-    <div class="nav-item" onclick="showPageMobile('weighin')" id="mnav-weighin">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-      Weigh-in
-    </div>
-    <div class="nav-item" onclick="showPageMobile('progress')" id="mnav-progress">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-      My progress
-    </div>
-    <div class="nav-item" onclick="showPageMobile('leaderboard')" id="mnav-leaderboard">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="18 20 18 10"/><polyline points="12 20 12 4"/><polyline points="6 20 6 14"/></svg>
-      Leaderboard
-    </div>
-    <div class="nav-item" onclick="showPageMobile('export')" id="mnav-export">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      Export
-    </div>
-    <div class="mobile-menu-close" onclick="closeMobileMenu()">&#10005; Close menu</div>
-  </div>
-</div>
-
 <div class="layout">
-  <!-- SIDEBAR (desktop) -->
   <nav class="sidebar">
-    <div class="nav-label">Programme</div>
-    <div class="nav-item active" onclick="showPage('dashboard')" id="nav-dashboard">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-      Dashboard
-    </div>
-    <div class="nav-item" onclick="showPage('register')" id="nav-register">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="16" y1="11" x2="22" y2="11"/></svg>
-      Register
-    </div>
-    <div class="nav-item" onclick="showPage('weighin')" id="nav-weighin">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-      Weigh-in
-    </div>
-    <div class="nav-item" onclick="showPage('progress')" id="nav-progress">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-      My progress
-    </div>
-    <div class="nav-item" onclick="showPage('leaderboard')" id="nav-leaderboard">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="18 20 18 10"/><polyline points="12 20 12 4"/><polyline points="6 20 6 14"/></svg>
-      Leaderboard
-    </div>
-    <div class="nav-item" onclick="showPage('export')" id="nav-export">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      Export
-    </div>
+    <div class="nlabel">Programme</div>
+    <div class="ni active" onclick="go('dashboard')" id="n-dashboard"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</div>
+    <div class="ni" onclick="go('register')" id="n-register"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="16" y1="11" x2="22" y2="11"/></svg>Register</div>
+    <div class="ni" onclick="go('weighin')" id="n-weighin"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Weigh-in</div>
+    <div class="ni" onclick="go('progress')" id="n-progress"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>My progress</div>
+    <div class="ni" onclick="go('leaderboard')" id="n-leaderboard"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="18 20 18 10"/><polyline points="12 20 12 4"/><polyline points="6 20 6 14"/></svg>Leaderboard</div>
+    <div class="ni" onclick="go('export')" id="n-export"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export</div>
   </nav>
 
-  <!-- MAIN CONTENT -->
   <main class="main">
 
-    <!-- DASHBOARD -->
-    <div class="page active" id="page-dashboard">
-      <div class="page-title">Dashboard</div>
-      <div class="page-sub">MTCA Wellness Weight Challenge overview</div>
-      <div class="stat-row" id="dash-stats">
-        <div class="stat-box"><div class="stat-label">Registered</div><div class="stat-val" id="ds-reg">-</div></div>
-        <div class="stat-box"><div class="stat-label">Active</div><div class="stat-val" id="ds-active">-</div></div>
-        <div class="stat-box"><div class="stat-label">Weigh-ins</div><div class="stat-val" id="ds-wi">-</div></div>
-        <div class="stat-box"><div class="stat-label">Losing weight</div><div class="stat-val pos" id="ds-losing">-</div></div>
+    <div class="page active" id="p-dashboard">
+      <div class="ptitle">Dashboard</div>
+      <div class="psub">MTCA Wellness Weight Challenge overview</div>
+      <div class="srow">
+        <div class="sbox"><div class="slbl">Registered</div><div class="sval" id="ds1">0</div></div>
+        <div class="sbox"><div class="slbl">Active</div><div class="sval" id="ds2">0</div></div>
+        <div class="sbox"><div class="slbl">Weigh-ins</div><div class="sval" id="ds3">0</div></div>
+        <div class="sbox"><div class="slbl">Losing weight</div><div class="sval pos" id="ds4">0</div></div>
       </div>
-      <div class="card">
-        <div class="card-title">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-          Participation by division
-        </div>
-        <div id="dash-divisions"><div class="empty"><strong>Loading...</strong></div></div>
-      </div>
-      <div class="card">
-        <div class="card-title">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          Recent activity
-        </div>
-        <div id="dash-recent"><div class="empty"><strong>Loading...</strong></div></div>
-      </div>
+      <div class="card"><div class="ctitle"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>Participation by division</div><div id="dd"></div></div>
+      <div class="card"><div class="ctitle"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Recent activity</div><div id="dr"></div></div>
     </div>
 
-    <!-- REGISTER -->
-    <div class="page" id="page-register">
-      <div class="page-title">Register</div>
-      <div class="page-sub">Enter your details to join the programme.</div>
+    <div class="page" id="p-register">
+      <div class="ptitle">Register</div>
+      <div class="psub">Enter your details to join the programme.</div>
       <div class="card">
-        <div id="reg-alert"></div>
-        <div class="form-grid">
-          <div class="field"><label>Full name</label><input type="text" id="reg-name" placeholder="Your full name"></div>
-          <div class="field"><label>Division</label>
-            <select id="reg-dept">
-              <option value="">Select division</option>
-              <option>Office of the Permanent Secretary</option>
-              <option>Tourism Development</option>
-              <option>Tourism Industry</option>
-              <option>Civil Aviation</option>
-              <option>Finance &amp; Corporate Services</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-grid">
-          <div class="field"><label>Height (cm)</label><input type="number" id="reg-height" placeholder="e.g. 175" inputmode="decimal"></div>
-          <div class="field"><label>Baseline weight (kg)</label><input type="number" id="reg-weight" placeholder="e.g. 82.5" step="0.1" inputmode="decimal"></div>
-        </div>
-        <div class="form-grid col1">
-          <div class="field"><label>Witness name</label><input type="text" id="reg-witness" placeholder="Witnessing colleague's name"></div>
-        </div>
-        <button class="btn btn-primary" onclick="registerParticipant()">Register &rarr;</button>
-        <p class="note">&#128274; Your weight is kept private. Only percentage changes appear on leaderboards.</p>
+        <div id="ra"></div>
+        <div class="fg"><div class="field"><label>Full name</label><input type="text" id="rn" placeholder="Your full name"></div><div class="field"><label>Division</label><select id="rd"><option value="">Select division</option><option>Office of the Permanent Secretary</option><option>Tourism Development</option><option>Tourism Industry</option><option>Civil Aviation</option><option>Finance &amp; Corporate Services</option></select></div></div>
+        <div class="fg"><div class="field"><label>Height (cm)</label><input type="number" id="rh" placeholder="e.g. 175" inputmode="decimal"></div><div class="field"><label>Baseline weight (kg)</label><input type="number" id="rw" placeholder="e.g. 82.5" step="0.1" inputmode="decimal"></div></div>
+        <div class="fg c1"><div class="field"><label>Witness name</label><input type="text" id="rwit" placeholder="Witnessing colleague"></div></div>
+        <button class="btn btnp" onclick="doRegister()">Register &rarr;</button>
+        <p class="note">&#128274; Your weight is private. Only percentage changes appear on leaderboards.</p>
       </div>
-
-      <div class="card">
-        <div class="card-title">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          Registered participants
-        </div>
-        <div class="table-wrap" id="reg-table"><div class="empty"><strong>Loading...</strong></div></div>
-      </div>
+      <div class="card"><div class="ctitle"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Registered participants</div><div class="tw" id="rt"><div class="empty"><strong>Loading data...</strong></div></div></div>
     </div>
 
-    <!-- WEIGH-IN -->
-    <div class="page" id="page-weighin">
-      <div class="page-title">Weigh-in</div>
-      <div class="page-sub">Record your Wednesday weigh-in. Must be witnessed.</div>
+    <div class="page" id="p-weighin">
+      <div class="ptitle">Weigh-in</div>
+      <div class="psub">Record your Wednesday weigh-in. Must be witnessed.</div>
       <div class="card">
-        <div id="wi-alert"></div>
-        <div class="form-grid col1">
-          <div class="field"><label>Your name</label>
-            <select id="wi-name"><option value="">Select your name</option></select>
-          </div>
-        </div>
-        <div class="form-grid">
-          <div class="field"><label>Weight today (kg)</label><input type="number" id="wi-weight" placeholder="e.g. 80.2" step="0.1" inputmode="decimal"></div>
-          <div class="field"><label>Witness name</label><input type="text" id="wi-witness" placeholder="Witnessing colleague"></div>
-        </div>
-        <button class="btn btn-primary" onclick="recordWeighIn()">Record weigh-in &rarr;</button>
-        <p class="note">&#128197; Programme started 18 March 2026. Weigh-ins every Wednesday (Wellness Wednesday).</p>
+        <div id="wa"></div>
+        <div class="fg c1"><div class="field"><label>Your name</label><select id="wn"><option value="">Select your name</option></select></div></div>
+        <div class="fg"><div class="field"><label>Weight today (kg)</label><input type="number" id="ww" placeholder="e.g. 80.2" step="0.1" inputmode="decimal"></div><div class="field"><label>Witness name</label><input type="text" id="wwit" placeholder="Witnessing colleague"></div></div>
+        <button class="btn btnp" onclick="doWeighIn()">Record weigh-in &rarr;</button>
+        <p class="note">&#128197; Programme started 18 March 2026. Weigh-ins every Wednesday.</p>
       </div>
-      <div class="card">
-        <div class="card-title">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Recent weigh-ins
-        </div>
-        <div class="table-wrap" id="wi-recent"><div class="empty"><strong>Loading...</strong></div></div>
-      </div>
+      <div class="card"><div class="ctitle"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Recent weigh-ins</div><div class="tw" id="wr"><div class="empty"><strong>Loading data...</strong></div></div></div>
     </div>
 
-    <!-- PROGRESS -->
-    <div class="page" id="page-progress">
-      <div class="page-title">My progress</div>
-      <div class="page-sub">Select your name to view your weight journey.</div>
-      <div class="field" style="margin-bottom:16px;">
-        <select id="prog-select" onchange="renderProgress()" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:15px;color:var(--text);background:var(--surface);">
-          <option value="">Select your name</option>
-        </select>
-      </div>
-      <div id="prog-content"><div class="empty"><strong>Select your name above</strong>Your progress will appear here.</div></div>
+    <div class="page" id="p-progress">
+      <div class="ptitle">My progress</div>
+      <div class="psub">Select your name to view your weight journey.</div>
+      <div class="field" style="margin-bottom:15px;"><select id="ps" onchange="renderProgress()" style="width:100%;padding:10px 11px;border:1px solid var(--border);border-radius:var(--rs);font-size:15px;color:var(--text);background:var(--surface);"><option value="">Select your name</option></select></div>
+      <div id="pc"><div class="empty"><strong>Select your name above</strong>Your progress will appear here.</div></div>
     </div>
 
-    <!-- LEADERBOARD -->
-    <div class="page" id="page-leaderboard">
-      <div class="page-title">Leaderboard</div>
-      <div class="page-sub">Rankings by percentage weight change. Weights are never shown publicly.</div>
-      <div id="lb-content"><div class="empty"><strong>Loading...</strong></div></div>
+    <div class="page" id="p-leaderboard">
+      <div class="ptitle">Leaderboard</div>
+      <div class="psub">Rankings by % weight change. Weights are never shown publicly.</div>
+      <div id="lb"><div class="empty"><strong>Loading data...</strong></div></div>
     </div>
 
-    <!-- EXPORT -->
-    <div class="page" id="page-export">
-      <div class="page-title">Export</div>
-      <div class="page-sub">Download programme data as CSV for Excel.</div>
-      <div class="card">
-        <div class="card-title">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Download data
-        </div>
-        <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">Export to open in your MTCA Excel tracker.</p>
-        <div style="display:flex;flex-direction:column;gap:10px;">
-          <button class="btn btn-primary" onclick="exportCSV('participants')">Download registrations (CSV)</button>
-          <button class="btn btn-primary" onclick="exportCSV('weighins')">Download all weigh-ins (CSV)</button>
+    <div class="page" id="p-export">
+      <div class="ptitle">Export</div>
+      <div class="psub">Download programme data as CSV for Excel.</div>
+      <div class="card"><div class="ctitle"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download data</div>
+        <div style="display:flex;flex-direction:column;gap:9px;">
+          <button class="btn btnp" onclick="doExport('participants')">Download registrations (CSV)</button>
+          <button class="btn btnp" onclick="doExport('weighins')">Download all weigh-ins (CSV)</button>
         </div>
       </div>
-      <div class="card">
-        <div class="card-title">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          About this app
-        </div>
-        <p style="font-size:13px;color:var(--text-muted);line-height:1.6;">Data is stored in Firebase (Google cloud) and syncs across all devices in real time. All staff on any phone or computer see the same data. Individual weight figures are private; only percentage changes are shown on leaderboards.</p>
-        <div id="export-stats" style="margin-top:12px;font-size:13px;color:var(--text-muted);"></div>
+      <div class="card"><div class="ctitle"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>About</div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.6;">All data is stored in Firebase (Google cloud) and syncs across every device in real time. Individual weights are private; only percentage changes appear on leaderboards.</p>
+        <div id="es" style="margin-top:10px;font-size:13px;color:var(--muted);"></div>
       </div>
     </div>
 
   </main>
 </div>
 
-<!-- BOTTOM NAV (mobile) -->
-<nav class="bottom-nav">
-  <div class="bottom-nav-items">
-    <div class="bn-item active" onclick="showPage('dashboard')" id="bn-dashboard">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-      Home
-    </div>
-    <div class="bn-item" onclick="showPage('register')" id="bn-register">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="16" y1="11" x2="22" y2="11"/></svg>
-      Register
-    </div>
-    <div class="bn-item" onclick="showPage('weighin')" id="bn-weighin">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-      Weigh-in
-    </div>
-    <div class="bn-item" onclick="showPage('progress')" id="bn-progress">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-      Progress
-    </div>
-    <div class="bn-item" onclick="showPage('leaderboard')" id="bn-leaderboard">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="18 20 18 10"/><polyline points="12 20 12 4"/><polyline points="6 20 6 14"/></svg>
-      Ranks
-    </div>
+<nav class="bnav">
+  <div class="bni">
+    <div class="bi active" onclick="go('dashboard')" id="b-dashboard"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Home</div>
+    <div class="bi" onclick="go('register')" id="b-register"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="16" y1="11" x2="22" y2="11"/></svg>Register</div>
+    <div class="bi" onclick="go('weighin')" id="b-weighin"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Weigh-in</div>
+    <div class="bi" onclick="go('progress')" id="b-progress"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Progress</div>
+    <div class="bi" onclick="go('leaderboard')" id="b-leaderboard"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="18 20 18 10"/><polyline points="12 20 12 4"/><polyline points="6 20 6 14"/></svg>Ranks</div>
   </div>
 </nav>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<div class="moverlay" id="mov" onclick="closeMenu()">
+  <div class="mpanel" onclick="event.stopPropagation()">
+    <div class="nlabel" style="padding:16px 16px 8px;">Programme</div>
+    <div class="ni active" onclick="go('dashboard');closeMenu()" id="m-dashboard"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</div>
+    <div class="ni" onclick="go('register');closeMenu()" id="m-register"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="16" y1="11" x2="22" y2="11"/></svg>Register</div>
+    <div class="ni" onclick="go('weighin');closeMenu()" id="m-weighin"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Weigh-in</div>
+    <div class="ni" onclick="go('progress');closeMenu()" id="m-progress"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>My progress</div>
+    <div class="ni" onclick="go('leaderboard');closeMenu()" id="m-leaderboard"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="18 20 18 10"/><polyline points="12 20 12 4"/><polyline points="6 20 6 14"/></svg>Leaderboard</div>
+    <div class="ni" onclick="go('export');closeMenu()" id="m-export"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export</div>
+    <div class="mclose" onclick="closeMenu()">&#10005; Close</div>
+  </div>
+</div>
+
+<!-- App logic - no blocking external scripts -->
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyBbTBE4wvnHnH_vnK20Pc1jNAE65nPWVhw",
-  authDomain: "mtca-wellness.firebaseapp.com",
-  databaseURL: "https://mtca-wellness-default-rtdb.firebaseio.com",
-  projectId: "mtca-wellness",
-  storageBucket: "mtca-wellness.firebasestorage.app",
-  messagingSenderId: "568169511647",
-  appId: "1:568169511647:web:34c4b64f9e1ac78ad0876a"
-};
+var P = {}, W = {}, pchart = null;
+var DIVS = ['Office of the Permanent Secretary','Tourism Development','Tourism Industry','Civil Aviation','Finance & Corporate Services'];
+var MED = ['🥇','🥈','🥉'];
+var fbReady = false;
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-
-// State
-let participants = {};
-let weighins = {};
-
-const DIVS = ['Office of the Permanent Secretary','Tourism Development','Tourism Industry','Civil Aviation','Finance & Corporate Services'];
-const medals = ['🥇','🥈','🥉'];
-
-// Sync indicator
-function setSyncing(state) {
-  const dot = document.getElementById('sync-dot');
-  const label = document.getElementById('sync-label');
-  dot.className = 'sync-dot ' + state;
-  label.textContent = state === 'syncing' ? 'Syncing...' : state === '' ? 'Live' : 'Offline';
+// Navigation - works immediately, no Firebase needed
+function go(name) {
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});
+  document.querySelectorAll('.ni,.bi').forEach(function(n){n.classList.remove('active')});
+  var pg = document.getElementById('p-'+name);
+  if(pg) pg.classList.add('active');
+  ['n-','b-','m-'].forEach(function(pfx){var el=document.getElementById(pfx+name);if(el)el.classList.add('active')});
+  if(name==='dashboard') renderDash();
+  if(name==='register') renderRegTable();
+  if(name==='weighin'){fillSel('wn');renderWR();}
+  if(name==='progress'){fillSel('ps');renderProgress();}
+  if(name==='leaderboard') renderLB();
+  if(name==='export') renderExport();
+  window.scrollTo(0,0);
 }
 
-// Show app immediately
-document.getElementById('loading-overlay').style.display = 'none';
+function openMenu(){document.getElementById('mov').style.display='block'}
+function closeMenu(){document.getElementById('mov').style.display='none'}
 
-// Listen to Firebase in real time - data loads in background
-db.ref('participants').on('value', snap => {
-  participants = snap.val() || {};
-  refreshAll();
-  setSyncing('');
-}, err => {
-  setSyncing('offline');
-});
-
-db.ref('weighins').on('value', snap => {
-  weighins = snap.val() || {};
-  refreshAll();
-});
-
-function refreshAll() {
-  const page = document.querySelector('.page.active')?.id?.replace('page-','');
-  if (page === 'dashboard') renderDashboard();
-  if (page === 'register') renderRegTable();
-  if (page === 'weighin') { populateSelect('wi-name'); renderRecentWI(); }
-  if (page === 'progress') { populateSelect('prog-select'); renderProgress(); }
-  if (page === 'leaderboard') renderLeaderboard();
-  if (page === 'export') renderExportStats();
-}
-
-// Navigation
-window.showPage = function(name) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item, .bn-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('page-' + name).classList.add('active');
-  document.getElementById('nav-' + name)?.classList.add('active');
-  document.getElementById('bn-' + name)?.classList.add('active');
-  refreshAll();
-  window.scrollTo(0, 0);
+// Alerts
+function alert2(id,msg,type){
+  var el=document.getElementById(id);
+  el.innerHTML='<div class="alert al-'+type+'">'+msg+'</div>';
+  setTimeout(function(){el.innerHTML=''},5000);
 }
 
 // Helpers
-function bmiCalc(w, h) { return w / ((h / 100) ** 2); }
-function bmiCat(b) {
-  if (b < 18.5) return { label: 'Underweight', cls: 'badge-under' };
-  if (b < 25)   return { label: 'Healthy', cls: 'badge-normal' };
-  if (b < 30)   return { label: 'Overweight', cls: 'badge-over' };
-  return { label: 'Obese', cls: 'badge-obese' };
+function bmi(w,h){return w/((h/100)*(h/100))}
+function bmiCat(b){
+  if(b<18.5)return{l:'Underweight',c:'bu'};
+  if(b<25)return{l:'Healthy',c:'bn'};
+  if(b<30)return{l:'Overweight',c:'bo'};
+  return{l:'Obese',c:'bb'};
 }
-function initials(name) { return name.split(' ').map(n => n[0]).join('').slice(0,2).toUpperCase(); }
-function fmt(n, d=1) { return Number(n).toFixed(d); }
-function chgClass(n) { return n < 0 ? 'pos' : n > 0 ? 'neg' : 'muted'; }
-function chgArrow(n) { return n < 0 ? '&#9660;' : n > 0 ? '&#9650;' : '&mdash;'; }
+function ini(n){return n.split(' ').map(function(x){return x[0]}).join('').slice(0,2).toUpperCase()}
+function fmt(n,d){d=d||1;return Number(n).toFixed(d)}
+function cc(n){return n<0?'pos':n>0?'neg':'muted'}
+function ca(n){return n<0?'&#9660;':n>0?'&#9650;':'&mdash;'}
+function pwi(name){return Object.values(W).filter(function(w){return w.name===name}).sort(function(a,b){return a.week-b.week})}
+function lat(name){var r=pwi(name);return r.length?r[r.length-1]:null}
 
-function showAlert(id, msg, type) {
-  const el = document.getElementById(id);
-  el.innerHTML = '<div class="alert alert-' + type + '">' + msg + '</div>';
-  setTimeout(() => { el.innerHTML = ''; }, 5000);
-}
-
-function getParticipantWeighins(name) {
-  return Object.values(weighins).filter(w => w.name === name).sort((a,b) => a.week - b.week);
+function setStat(state){
+  var d=document.getElementById('sdot'),l=document.getElementById('slabel');
+  d.className='sdot'+(state==='sync'?' sync':state==='off'?' off':'');
+  l.textContent=state==='sync'?'Syncing':state==='off'?'Offline':'Live';
 }
 
-function getLatest(name) {
-  const r = getParticipantWeighins(name);
-  return r.length ? r[r.length - 1] : null;
+// Refresh current page when data updates
+function refresh(){
+  var a=document.querySelector('.page.active');
+  if(!a) return;
+  var name=a.id.replace('p-','');
+  if(name==='dashboard') renderDash();
+  if(name==='register') renderRegTable();
+  if(name==='weighin'){fillSel('wn');renderWR();}
+  if(name==='progress'){fillSel('ps');renderProgress();}
+  if(name==='leaderboard') renderLB();
+  if(name==='export') renderExport();
 }
 
 // ---- REGISTER ----
-window.registerParticipant = async function() {
-  const name = document.getElementById('reg-name').value.trim();
-  const dept = document.getElementById('reg-dept').value;
-  const height = parseFloat(document.getElementById('reg-height').value);
-  const weight = parseFloat(document.getElementById('reg-weight').value);
-  const witness = document.getElementById('reg-witness').value.trim();
-  if (!name || !dept || !height || !weight || !witness) { showAlert('reg-alert','Please complete all fields.','info'); return; }
-  const already = Object.values(participants).find(p => p.name.toLowerCase() === name.toLowerCase());
-  if (already) { showAlert('reg-alert', name + ' is already registered.', 'warn'); return; }
-  const b = +fmt(bmiCalc(weight, height));
-  const cat = bmiCat(b);
-  setSyncing('syncing');
-  await db.ref('participants').push({ name, dept, height, baseline: weight, bmi: b, bmiLabel: cat.label, bmiCls: cat.cls, witness, regDate: new Date().toLocaleDateString('en-FJ'), ts: Date.now() });
-  setSyncing('');
-  ['reg-name','reg-height','reg-weight','reg-witness'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('reg-dept').value = '';
-  showAlert('reg-alert', name + ' registered successfully!', 'success');
+function doRegister(){
+  var name=document.getElementById('rn').value.trim();
+  var dept=document.getElementById('rd').value;
+  var h=parseFloat(document.getElementById('rh').value);
+  var w=parseFloat(document.getElementById('rw').value);
+  var wit=document.getElementById('rwit').value.trim();
+  if(!name||!dept||!h||!w||!wit){alert2('ra','Please complete all fields.','i');return}
+  if(Object.values(P).find(function(p){return p.name.toLowerCase()===name.toLowerCase()})){alert2('ra',name+' is already registered.','i');return}
+  var b=+fmt(bmi(w,h));
+  var cat=bmiCat(b);
+  var data={name:name,dept:dept,height:h,baseline:w,bmi:b,bmiL:cat.l,bmiC:cat.c,witness:wit,regDate:new Date().toLocaleDateString('en-FJ'),ts:Date.now()};
+  if(fbReady){
+    setStat('sync');
+    window._fbdb.ref('participants').push(data).then(function(){
+      setStat('');
+      ['rn','rh','rw','rwit'].forEach(function(id){document.getElementById(id).value=''});
+      document.getElementById('rd').value='';
+      alert2('ra',name+' registered successfully!','s');
+    });
+  } else {
+    alert2('ra','Not connected to database yet. Please wait and try again.','i');
+  }
 }
 
-function renderRegTable() {
-  const el = document.getElementById('reg-table');
-  const list = Object.entries(participants);
-  if (!list.length) { el.innerHTML = '<div class="empty"><strong>No participants yet</strong>Be the first to register above.</div>'; return; }
-  let h = '<table><thead><tr><th></th><th>Name</th><th>Division</th><th>BMI</th><th>Registered</th><th></th></tr></thead><tbody>';
-  list.forEach(([key, p]) => {
-    h += '<tr><td><div class="avatar" style="width:30px;height:30px;font-size:11px;">' + initials(p.name) + '</div></td>';
-    h += '<td><strong>' + p.name + '</strong></td>';
-    h += '<td class="muted" style="font-size:12px;">' + p.dept + '</td>';
-    h += '<td>' + p.bmi + ' <span class="badge ' + p.bmiCls + '">' + p.bmiLabel + '</span></td>';
-    h += '<td class="muted" style="font-size:12px;">' + p.regDate + '</td>';
-    h += '<td><button class="btn btn-danger btn-sm" onclick="deleteParticipant(\'' + key + '\',\'' + p.name + '\')">Remove</button></td></tr>';
+function renderRegTable(){
+  var el=document.getElementById('rt');
+  var list=Object.entries(P);
+  if(!list.length){el.innerHTML='<div class="empty"><strong>No participants yet</strong>Be the first to register above.</div>';return}
+  var h='<table><thead><tr><th></th><th>Name</th><th>Division</th><th>BMI</th><th>Date</th><th></th></tr></thead><tbody>';
+  list.forEach(function(kv){
+    var k=kv[0],p=kv[1];
+    h+='<tr><td><div class="av" style="width:29px;height:29px;font-size:11px;">'+ini(p.name)+'</div></td>';
+    h+='<td><strong>'+p.name+'</strong></td>';
+    h+='<td class="muted" style="font-size:12px;">'+p.dept+'</td>';
+    h+='<td>'+p.bmi+' <span class="badge '+p.bmiC+'">'+p.bmiL+'</span></td>';
+    h+='<td class="muted" style="font-size:12px;">'+p.regDate+'</td>';
+    h+='<td><button class="btn btnd btnsm" onclick="delP(\''+k+'\',\''+p.name+'\')">Remove</button></td></tr>';
   });
-  h += '</tbody></table>';
-  el.innerHTML = h;
+  h+='</tbody></table>';
+  el.innerHTML=h;
 }
 
-window.deleteParticipant = async function(key, name) {
-  if (!confirm('Remove ' + name + ' and all their weigh-in records?')) return;
-  setSyncing('syncing');
-  await db.ref('participants/' + key).remove();
-  const toDelete = Object.entries(weighins).filter(([,w]) => w.name === name);
-  for (const [k] of toDelete) await db.ref('weighins/' + k).remove();
-  setSyncing('');
+function delP(key,name){
+  if(!confirm('Remove '+name+' and all weigh-in records?')) return;
+  setStat('sync');
+  window._fbdb.ref('participants/'+key).remove();
+  Object.entries(W).forEach(function(kv){if(kv[1].name===name)window._fbdb.ref('weighins/'+kv[0]).remove()});
+  setStat('');
 }
 
 // ---- WEIGH-IN ----
-function populateSelect(id) {
-  const sel = document.getElementById(id);
-  const cur = sel.value;
-  sel.innerHTML = '<option value="">Select your name</option>';
-  Object.values(participants).sort((a,b) => a.name.localeCompare(b.name)).forEach(p => {
-    sel.innerHTML += '<option' + (p.name === cur ? ' selected' : '') + '>' + p.name + '</option>';
+function fillSel(id){
+  var sel=document.getElementById(id);
+  var cur=sel.value;
+  sel.innerHTML='<option value="">Select your name</option>';
+  Object.values(P).sort(function(a,b){return a.name.localeCompare(b.name)}).forEach(function(p){
+    sel.innerHTML+='<option'+(p.name===cur?' selected':'')+'>'+p.name+'</option>';
   });
 }
 
-window.recordWeighIn = async function() {
-  const name = document.getElementById('wi-name').value;
-  const weight = parseFloat(document.getElementById('wi-weight').value);
-  const witness = document.getElementById('wi-witness').value.trim();
-  if (!name || !weight || !witness) { showAlert('wi-alert','Please complete all fields.','info'); return; }
-  const p = Object.values(participants).find(x => x.name === name);
-  if (!p) return;
-  const prev = getParticipantWeighins(name);
-  const lastW = prev.length ? prev[prev.length-1].weight : p.baseline;
-  const week = prev.length + 1;
-  const change = +fmt(weight - lastW);
-  const total = +fmt(weight - p.baseline);
-  const pct = +fmt((total / p.baseline) * 100, 2);
-  const newBMI = +fmt(bmiCalc(weight, p.height));
-  setSyncing('syncing');
-  await db.ref('weighins').push({ name, weight, change, total, pct, bmi: newBMI, witness, week, date: new Date().toLocaleDateString('en-FJ'), ts: Date.now() });
-  setSyncing('');
-  document.getElementById('wi-weight').value = '';
-  document.getElementById('wi-witness').value = '';
-  showAlert('wi-alert', 'Week ' + week + ' weigh-in recorded for ' + name + '.', 'success');
+function doWeighIn(){
+  var name=document.getElementById('wn').value;
+  var w=parseFloat(document.getElementById('ww').value);
+  var wit=document.getElementById('wwit').value.trim();
+  if(!name||!w||!wit){alert2('wa','Please complete all fields.','i');return}
+  var p=Object.values(P).find(function(x){return x.name===name});
+  if(!p) return;
+  var prev=pwi(name);
+  var lastW=prev.length?prev[prev.length-1].weight:p.baseline;
+  var week=prev.length+1;
+  var change=+fmt(w-lastW);
+  var total=+fmt(w-p.baseline);
+  var pct=+fmt((total/p.baseline)*100,2);
+  var newBMI=+fmt(bmi(w,p.height));
+  if(fbReady){
+    setStat('sync');
+    window._fbdb.ref('weighins').push({name:name,weight:w,change:change,total:total,pct:pct,bmi:newBMI,witness:wit,week:week,date:new Date().toLocaleDateString('en-FJ'),ts:Date.now()}).then(function(){
+      setStat('');
+      document.getElementById('ww').value='';
+      document.getElementById('wwit').value='';
+      alert2('wa','Week '+week+' weigh-in recorded for '+name+'.','s');
+    });
+  } else {
+    alert2('wa','Not connected yet. Please wait and try again.','i');
+  }
 }
 
-function renderRecentWI() {
-  const el = document.getElementById('wi-recent');
-  const list = Object.values(weighins).sort((a,b) => b.ts - a.ts).slice(0,15);
-  if (!list.length) { el.innerHTML = '<div class="empty"><strong>No weigh-ins yet</strong>Record the first entry above.</div>'; return; }
-  let h = '<table><thead><tr><th>Name</th><th>Wk</th><th>Weight</th><th>Change</th><th>Witness</th></tr></thead><tbody>';
-  list.forEach(w => {
-    h += '<tr><td><strong>' + w.name + '</strong></td><td>' + w.week + '</td><td>' + w.weight + ' kg</td>';
-    h += '<td class="' + chgClass(w.change) + '">' + chgArrow(w.change) + ' ' + Math.abs(w.change) + '</td>';
-    h += '<td><span class="witness-tag">' + w.witness + '</span></td></tr>';
+function renderWR(){
+  var el=document.getElementById('wr');
+  var list=Object.values(W).sort(function(a,b){return b.ts-a.ts}).slice(0,15);
+  if(!list.length){el.innerHTML='<div class="empty"><strong>No weigh-ins yet</strong>Record the first entry above.</div>';return}
+  var h='<table><thead><tr><th>Name</th><th>Wk</th><th>Weight</th><th>Change</th><th>Witness</th></tr></thead><tbody>';
+  list.forEach(function(w){
+    h+='<tr><td><strong>'+w.name+'</strong></td><td>'+w.week+'</td><td>'+w.weight+' kg</td>';
+    h+='<td class="'+cc(w.change)+'">'+ca(w.change)+' '+Math.abs(w.change)+'</td>';
+    h+='<td><span class="wtag">'+w.witness+'</span></td></tr>';
   });
-  h += '</tbody></table>';
-  el.innerHTML = h;
+  h+='</tbody></table>';
+  el.innerHTML=h;
 }
 
 // ---- PROGRESS ----
-let progressChart = null;
+function renderProgress(){
+  var name=document.getElementById('ps').value;
+  var el=document.getElementById('pc');
+  if(!name){el.innerHTML='<div class="empty"><strong>Select your name above</strong>Your progress will appear here.</div>';return}
+  var p=Object.values(P).find(function(x){return x.name===name});
+  if(!p) return;
+  var recs=pwi(name);
+  var latest=recs.length?recs[recs.length-1]:null;
+  var curW=latest?latest.weight:p.baseline;
+  var curBMI=latest?latest.bmi:p.bmi;
+  var total=latest?latest.total:0;
+  var pct=latest?latest.pct:0;
+  var cat=bmiCat(curBMI);
+  var gk=+fmt(p.baseline*0.05);
+  var gp=total<0?Math.min(100,Math.round((Math.abs(total)/gk)*100)):0;
 
-window.renderProgress = function() {
-  const name = document.getElementById('prog-select').value;
-  const el = document.getElementById('prog-content');
-  if (!name) { el.innerHTML = '<div class="empty"><strong>Select your name above</strong>Your progress will appear here.</div>'; return; }
-  const p = Object.values(participants).find(x => x.name === name);
-  if (!p) return;
-  const records = getParticipantWeighins(name);
-  const latest = records.length ? records[records.length-1] : null;
-  const curW = latest ? latest.weight : p.baseline;
-  const curBMI = latest ? latest.bmi : p.bmi;
-  const total = latest ? latest.total : 0;
-  const pct = latest ? latest.pct : 0;
-  const cat = bmiCat(curBMI);
-  const goalKg = +fmt(p.baseline * 0.05);
-  const progPct = total < 0 ? Math.min(100, Math.round((Math.abs(total)/goalKg)*100)) : 0;
+  var h='<div class="card"><div class="ph"><div class="av">'+ini(name)+'</div><div><p style="font-weight:700;font-size:16px;">'+name+'</p><p class="muted" style="font-size:13px;">'+p.dept+'</p></div></div>';
+  h+='<div class="srow">';
+  h+='<div class="sbox"><div class="slbl">Current</div><div class="sval">'+curW+'<span class="sunit"> kg</span></div></div>';
+  h+='<div class="sbox"><div class="slbl">Baseline</div><div class="sval">'+p.baseline+'<span class="sunit"> kg</span></div></div>';
+  h+='<div class="sbox"><div class="slbl">Change</div><div class="sval '+cc(total)+'">'+(total>0?'+':'')+total+'<span class="sunit"> kg</span></div></div>';
+  h+='<div class="sbox"><div class="slbl">% change</div><div class="sval '+cc(pct)+'">'+(pct>0?'+':'')+pct+'<span class="sunit">%</span></div></div>';
+  h+='<div class="sbox"><div class="slbl">BMI</div><div class="sval">'+curBMI+'</div><div style="margin-top:4px;"><span class="badge '+cat.c+'">'+cat.l+'</span></div></div>';
+  h+='<div class="sbox"><div class="slbl">Weeks</div><div class="sval">'+recs.length+'</div></div>';
+  h+='</div><hr>';
+  h+='<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;"><span class="muted">5% goal (&minus;'+gk+' kg)</span><span style="font-weight:700;">'+gp+'%</span></div>';
+  h+='<div class="pw"><div class="pf'+(gp>=100?' gold':'')+'" style="width:'+gp+'%;"></div></div>';
+  if(gp>=100) h+='<p style="font-size:12px;color:var(--success);margin-top:4px;">&#127881; 5% goal achieved!</p>';
+  h+='</div>';
 
-  let h = '<div class="card"><div class="profile-header"><div class="avatar">' + initials(name) + '</div><div><p style="font-weight:700;font-size:16px;">' + name + '</p><p class="muted" style="font-size:13px;">' + p.dept + '</p></div></div>';
-  h += '<div class="stat-row">';
-  h += '<div class="stat-box"><div class="stat-label">Current</div><div class="stat-val">' + curW + '<span class="stat-unit"> kg</span></div></div>';
-  h += '<div class="stat-box"><div class="stat-label">Baseline</div><div class="stat-val">' + p.baseline + '<span class="stat-unit"> kg</span></div></div>';
-  h += '<div class="stat-box"><div class="stat-label">Total change</div><div class="stat-val ' + chgClass(total) + '">' + (total > 0 ? '+' : '') + total + '<span class="stat-unit"> kg</span></div></div>';
-  h += '<div class="stat-box"><div class="stat-label">% change</div><div class="stat-val ' + chgClass(pct) + '">' + (pct > 0 ? '+' : '') + pct + '<span class="stat-unit">%</span></div></div>';
-  h += '<div class="stat-box"><div class="stat-label">BMI</div><div class="stat-val">' + curBMI + '</div><div style="margin-top:4px;"><span class="badge ' + cat.cls + '">' + cat.label + '</span></div></div>';
-  h += '<div class="stat-box"><div class="stat-label">Weeks</div><div class="stat-val">' + records.length + '</div></div>';
-  h += '</div><hr>';
-  h += '<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;"><span class="muted">Progress toward 5% goal (&minus;' + goalKg + ' kg)</span><span style="font-weight:700;">' + progPct + '%</span></div>';
-  h += '<div class="prog-wrap"><div class="prog-fill' + (progPct >= 100 ? ' gold' : '') + '" style="width:' + progPct + '%;"></div></div>';
-  if (progPct >= 100) h += '<p style="font-size:12px;color:var(--success);margin-top:4px;">&#127881; 5% goal achieved!</p>';
-  h += '</div>';
-
-  if (records.length >= 2) {
-    h += '<div class="card"><div class="card-title"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:15px;height:15px;color:var(--gold);"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Weight trend</div><div class="chart-container"><canvas id="prog-chart" height="180"></canvas></div></div>';
-  } else if (!records.length) {
-    h += '<div class="card"><p class="muted" style="font-size:13px;">No weigh-ins recorded yet. Go to the Weigh-in tab to log your first entry.</p></div>';
+  if(recs.length>=2){
+    h+='<div class="card"><div class="ctitle"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:15px;height:15px;color:var(--gold);"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Weight trend</div><div class="chartbox"><canvas id="pc2" height="180"></canvas></div></div>';
+  } else if(!recs.length){
+    h+='<div class="card"><p class="muted" style="font-size:13px;">No weigh-ins yet. Go to the Weigh-in tab to log your first entry.</p></div>';
   }
 
-  if (records.length) {
-    h += '<div class="card"><div class="card-title"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:15px;height:15px;color:var(--gold);"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>History</div>';
-    h += '<div class="table-wrap"><table><thead><tr><th>Wk</th><th>Date</th><th>Weight</th><th>Change</th><th>Total</th><th>%</th><th>Witness</th></tr></thead><tbody>';
-    records.forEach(w => {
-      h += '<tr><td>' + w.week + '</td><td class="muted">' + w.date + '</td><td>' + w.weight + '</td>';
-      h += '<td class="' + chgClass(w.change) + '">' + (w.change > 0 ? '+' : '') + w.change + '</td>';
-      h += '<td class="' + chgClass(w.total) + '">' + (w.total > 0 ? '+' : '') + w.total + '</td>';
-      h += '<td class="' + chgClass(w.pct) + '">' + (w.pct > 0 ? '+' : '') + w.pct + '%</td>';
-      h += '<td><span class="witness-tag">' + w.witness + '</span></td></tr>';
+  if(recs.length){
+    h+='<div class="card"><div class="ctitle"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:15px;height:15px;color:var(--gold);"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>History</div>';
+    h+='<div class="tw"><table><thead><tr><th>Wk</th><th>Date</th><th>Weight</th><th>Change</th><th>Total</th><th>%</th><th>Witness</th></tr></thead><tbody>';
+    recs.forEach(function(w){
+      h+='<tr><td>'+w.week+'</td><td class="muted">'+w.date+'</td><td>'+w.weight+'</td>';
+      h+='<td class="'+cc(w.change)+'">'+(w.change>0?'+':'')+w.change+'</td>';
+      h+='<td class="'+cc(w.total)+'">'+(w.total>0?'+':'')+w.total+'</td>';
+      h+='<td class="'+cc(w.pct)+'">'+(w.pct>0?'+':'')+w.pct+'%</td>';
+      h+='<td><span class="wtag">'+w.witness+'</span></td></tr>';
     });
-    h += '</tbody></table></div></div>';
+    h+='</tbody></table></div></div>';
   }
 
-  el.innerHTML = h;
+  el.innerHTML=h;
 
-  if (records.length >= 2) {
-    const labels = ['Baseline', ...records.map(r => 'Wk ' + r.week)];
-    const data = [p.baseline, ...records.map(r => r.weight)];
-    if (progressChart) { progressChart.destroy(); progressChart = null; }
-    const ctx = document.getElementById('prog-chart').getContext('2d');
-    progressChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels,
-        datasets: [{ label: 'Weight (kg)', data, borderColor: '#002060', backgroundColor: 'rgba(0,32,96,0.07)', borderWidth: 2, pointBackgroundColor: '#C8A84B', pointRadius: 5, tension: 0.3, fill: true }]
-      },
-      options: {
-        responsive: true,
-        plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.parsed.y.toFixed(1) + ' kg' } } },
-        scales: {
-          y: { ticks: { callback: v => v + ' kg', font: { size: 11 } }, grid: { color: 'rgba(0,0,0,0.05)' } },
-          x: { ticks: { font: { size: 11 } }, grid: { display: false } }
-        }
-      }
-    });
+  if(recs.length>=2 && typeof Chart!=='undefined'){
+    var labels=['Baseline'].concat(recs.map(function(r){return'Wk '+r.week}));
+    var data=[p.baseline].concat(recs.map(function(r){return r.weight}));
+    if(pchart){pchart.destroy();pchart=null}
+    var ctx=document.getElementById('pc2').getContext('2d');
+    pchart=new Chart(ctx,{type:'line',data:{labels:labels,datasets:[{label:'Weight (kg)',data:data,borderColor:'#002060',backgroundColor:'rgba(0,32,96,.07)',borderWidth:2,pointBackgroundColor:'#C8A84B',pointRadius:5,tension:.3,fill:true}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.parsed.y.toFixed(1)+' kg'}}}},scales:{y:{ticks:{callback:function(v){return v+' kg'},font:{size:11}},grid:{color:'rgba(0,0,0,.05)'}},x:{ticks:{font:{size:11}},grid:{display:false}}}}});
   }
 }
 
 // ---- LEADERBOARD ----
-function renderLeaderboard() {
-  const el = document.getElementById('lb-content');
-  const ranked = Object.values(participants)
-    .map(p => ({ p, l: getLatest(p.name) }))
-    .filter(x => x.l)
-    .sort((a,b) => a.l.pct - b.l.pct);
+function renderLB(){
+  var el=document.getElementById('lb');
+  var ranked=Object.values(P).map(function(p){return{p:p,l:lat(p.name)}}).filter(function(x){return x.l}).sort(function(a,b){return a.l.pct-b.l.pct});
+  var cons=Object.values(P).map(function(p){return{p:p,wks:pwi(p.name).length}}).filter(function(x){return x.wks>0}).sort(function(a,b){return b.wks-a.wks});
+  var dm={};DIVS.forEach(function(d){dm[d]={t:0,c:0}});
+  ranked.forEach(function(r){if(dm[r.p.dept]){dm[r.p.dept].t+=r.l.pct;dm[r.p.dept].c++}});
+  var dr=Object.entries(dm).filter(function(e){return e[1].c>0}).map(function(e){return{d:e[0],avg:+(e[1].t/e[1].c).toFixed(2)}}).sort(function(a,b){return a.avg-b.avg});
 
-  const consistency = Object.values(participants)
-    .map(p => ({ p, weeks: getParticipantWeighins(p.name).length }))
-    .filter(x => x.weeks > 0)
-    .sort((a,b) => b.weeks - a.weeks);
+  if(!ranked.length){el.innerHTML='<div class="empty"><strong>No data yet</strong>Register and record weigh-ins to see rankings.</div>';return}
 
-  const deptMap = {};
-  DIVS.forEach(d => { deptMap[d] = { total: 0, count: 0 }; });
-  ranked.forEach(r => { if (deptMap[r.p.dept]) { deptMap[r.p.dept].total += r.l.pct; deptMap[r.p.dept].count++; } });
-  const deptRanked = Object.entries(deptMap).filter(([,v]) => v.count > 0).map(([dept,v]) => ({ dept, avg: +(v.total/v.count).toFixed(2) })).sort((a,b) => a.avg - b.avg);
-
-  if (!ranked.length) { el.innerHTML = '<div class="empty"><strong>No data yet</strong>Register and record weigh-ins to see rankings.</div>'; return; }
-
-  let h = '<div class="card"><div class="card-title"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:15px;height:15px;color:var(--gold);"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>Top performers &mdash; % weight change</div>';
-  h += '<div class="table-wrap"><table><thead><tr><th></th><th>Name</th><th>% change</th><th>kg lost</th></tr></thead><tbody>';
-  ranked.slice(0,10).forEach((r,i) => {
-    const med = i < 3 ? '<span class="lb-medal">' + medals[i] + '</span>' : '<span class="lb-rank">' + (i+1) + '</span>';
-    h += '<tr><td style="text-align:center;">' + med + '</td><td><strong>' + r.p.name + '</strong><br><span class="muted" style="font-size:11px;">' + r.p.dept + '</span></td>';
-    h += '<td class="' + chgClass(r.l.pct) + '">' + (r.l.pct > 0 ? '+' : '') + r.l.pct + '%</td>';
-    h += '<td class="' + chgClass(r.l.total) + '">' + (r.l.total < 0 ? fmt(Math.abs(r.l.total)) + ' kg' : '&mdash;') + '</td></tr>';
+  var h='<div class="card"><div class="ctitle"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:15px;height:15px;color:var(--gold);"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>Top performers &mdash; % change</div>';
+  h+='<div class="tw"><table><thead><tr><th></th><th>Name</th><th>% change</th><th>kg lost</th></tr></thead><tbody>';
+  ranked.slice(0,10).forEach(function(r,i){
+    var m=i<3?'<span class="lbm">'+MED[i]+'</span>':'<span class="lbr">'+(i+1)+'</span>';
+    h+='<tr><td style="text-align:center;">'+m+'</td><td><strong>'+r.p.name+'</strong><br><span class="muted" style="font-size:11px;">'+r.p.dept+'</span></td>';
+    h+='<td class="'+cc(r.l.pct)+'">'+(r.l.pct>0?'+':'')+r.l.pct+'%</td>';
+    h+='<td class="'+cc(r.l.total)+'">'+(r.l.total<0?fmt(Math.abs(r.l.total))+' kg':'&mdash;')+'</td></tr>';
   });
-  h += '</tbody></table></div></div>';
+  h+='</tbody></table></div></div>';
 
-  h += '<div class="card"><div class="card-title"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:15px;height:15px;color:var(--gold);"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Consistency &mdash; weeks logged</div>';
-  h += '<div class="table-wrap"><table><thead><tr><th></th><th>Name</th><th>Weeks</th></tr></thead><tbody>';
-  consistency.slice(0,10).forEach((r,i) => {
-    const med = i < 3 ? '<span class="lb-medal">' + medals[i] + '</span>' : '<span class="lb-rank">' + (i+1) + '</span>';
-    h += '<tr><td style="text-align:center;">' + med + '</td><td><strong>' + r.p.name + '</strong><br><span class="muted" style="font-size:11px;">' + r.p.dept + '</span></td><td>' + r.weeks + '</td></tr>';
+  h+='<div class="card"><div class="ctitle"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:15px;height:15px;color:var(--gold);"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Consistency &mdash; weeks logged</div>';
+  h+='<div class="tw"><table><thead><tr><th></th><th>Name</th><th>Weeks</th></tr></thead><tbody>';
+  cons.slice(0,10).forEach(function(r,i){
+    var m=i<3?'<span class="lbm">'+MED[i]+'</span>':'<span class="lbr">'+(i+1)+'</span>';
+    h+='<tr><td style="text-align:center;">'+m+'</td><td><strong>'+r.p.name+'</strong><br><span class="muted" style="font-size:11px;">'+r.p.dept+'</span></td><td>'+r.wks+'</td></tr>';
   });
-  h += '</tbody></table></div></div>';
+  h+='</tbody></table></div></div>';
 
-  if (deptRanked.length) {
-    h += '<div class="card"><div class="card-title"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:15px;height:15px;color:var(--gold);"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>Division standings</div>';
-    h += '<div class="table-wrap"><table><thead><tr><th></th><th>Division</th><th>Avg % change</th></tr></thead><tbody>';
-    deptRanked.forEach((d,i) => {
-      const med = i < 3 ? '<span class="lb-medal">' + medals[i] + '</span>' : '<span class="lb-rank">' + (i+1) + '</span>';
-      h += '<tr><td style="text-align:center;">' + med + '</td><td>' + d.dept + '</td><td class="' + chgClass(d.avg) + '">' + (d.avg > 0 ? '+' : '') + d.avg + '%</td></tr>';
+  if(dr.length){
+    h+='<div class="card"><div class="ctitle"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:15px;height:15px;color:var(--gold);"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>Division standings</div>';
+    h+='<div class="tw"><table><thead><tr><th></th><th>Division</th><th>Avg %</th></tr></thead><tbody>';
+    dr.forEach(function(d,i){
+      var m=i<3?'<span class="lbm">'+MED[i]+'</span>':'<span class="lbr">'+(i+1)+'</span>';
+      h+='<tr><td style="text-align:center;">'+m+'</td><td>'+d.d+'</td><td class="'+cc(d.avg)+'">'+(d.avg>0?'+':'')+d.avg+'%</td></tr>';
     });
-    h += '</tbody></table></div></div>';
+    h+='</tbody></table></div></div>';
   }
-
-  h += '<div class="alert alert-info" style="font-size:13px;">&#128274; Individual weights are never shown here. Rankings use percentage change only.</div>';
-  el.innerHTML = h;
+  h+='<div class="alert al-i" style="font-size:13px;">&#128274; Individual weights are never shown here.</div>';
+  el.innerHTML=h;
 }
 
 // ---- DASHBOARD ----
-function renderDashboard() {
-  const pList = Object.values(participants);
-  const wList = Object.values(weighins);
-  const active = [...new Set(wList.map(w => w.name))].length;
-  const losses = pList.filter(p => { const l = getLatest(p.name); return l && l.total < 0; }).length;
-
-  document.getElementById('ds-reg').textContent = pList.length;
-  document.getElementById('ds-active').textContent = active;
-  document.getElementById('ds-wi').textContent = wList.length;
-  document.getElementById('ds-losing').textContent = losses;
-
-  const divsEl = document.getElementById('dash-divisions');
-  if (!pList.length) { divsEl.innerHTML = '<div class="empty" style="padding:12px 0;">No participants registered yet.</div>'; }
-  else {
-    let h = '';
-    DIVS.forEach(d => {
-      const count = pList.filter(p => p.dept === d).length;
-      if (!count) return;
-      const pct = Math.round((count / pList.length) * 100);
-      h += '<div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:3px;"><span>' + d + '</span><span class="muted">' + count + '</span></div><div class="prog-wrap"><div class="prog-fill" style="width:' + pct + '%;"></div></div></div>';
+function renderDash(){
+  var pl=Object.values(P),wl=Object.values(W);
+  var active=[...new Set(wl.map(function(w){return w.name}))].length;
+  var losing=pl.filter(function(p){var l=lat(p.name);return l&&l.total<0}).length;
+  document.getElementById('ds1').textContent=pl.length;
+  document.getElementById('ds2').textContent=active;
+  document.getElementById('ds3').textContent=wl.length;
+  document.getElementById('ds4').textContent=losing;
+  var dd=document.getElementById('dd');
+  if(!pl.length){dd.innerHTML='<div class="empty" style="padding:10px 0;">No participants yet.</div>';}
+  else{
+    var h='';
+    DIVS.forEach(function(d){
+      var c=pl.filter(function(p){return p.dept===d}).length;
+      if(!c) return;
+      var pct=Math.round((c/pl.length)*100);
+      h+='<div style="margin-bottom:11px;"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:3px;"><span>'+d+'</span><span class="muted">'+c+'</span></div><div class="pw"><div class="pf" style="width:'+pct+'%;"></div></div></div>';
     });
-    divsEl.innerHTML = h;
+    dd.innerHTML=h;
   }
-
-  const recentEl = document.getElementById('dash-recent');
-  const recent = wList.sort((a,b) => b.ts - a.ts).slice(0,5);
-  if (!recent.length) { recentEl.innerHTML = '<div class="empty" style="padding:12px 0;">No weigh-ins recorded yet.</div>'; }
-  else {
-    let h = '<table><thead><tr><th>Name</th><th>Week</th><th>Date</th><th>Change</th></tr></thead><tbody>';
-    recent.forEach(w => {
-      h += '<tr><td><strong>' + w.name + '</strong></td><td>Wk ' + w.week + '</td><td class="muted">' + w.date + '</td><td class="' + chgClass(w.change) + '">' + chgArrow(w.change) + ' ' + Math.abs(w.change) + ' kg</td></tr>';
-    });
-    h += '</tbody></table>';
-    recentEl.innerHTML = h;
+  var dr=document.getElementById('dr');
+  var rec=wl.sort(function(a,b){return b.ts-a.ts}).slice(0,5);
+  if(!rec.length){dr.innerHTML='<div class="empty" style="padding:10px 0;">No weigh-ins recorded yet.</div>';}
+  else{
+    var h2='<table><thead><tr><th>Name</th><th>Week</th><th>Date</th><th>Change</th></tr></thead><tbody>';
+    rec.forEach(function(w){h2+='<tr><td><strong>'+w.name+'</strong></td><td>Wk '+w.week+'</td><td class="muted">'+w.date+'</td><td class="'+cc(w.change)+'">'+ca(w.change)+' '+Math.abs(w.change)+' kg</td></tr>'});
+    h2+='</tbody></table>';
+    dr.innerHTML=h2;
   }
 }
 
 // ---- EXPORT ----
-function renderExportStats() {
-  document.getElementById('export-stats').innerHTML =
-    'Registered: <strong>' + Object.keys(participants).length + ' participants</strong> &nbsp;&middot;&nbsp; Total weigh-ins: <strong>' + Object.keys(weighins).length + '</strong>';
+function renderExport(){
+  document.getElementById('es').innerHTML='Participants: <strong>'+Object.keys(P).length+'</strong> &nbsp;&middot;&nbsp; Weigh-ins: <strong>'+Object.keys(W).length+'</strong>';
 }
 
-window.toggleMobileMenu = function() {
-  document.getElementById('mobile-menu').style.display = 'block';
-}
-window.closeMobileMenu = function() {
-  document.getElementById('mobile-menu').style.display = 'none';
-}
-window.showPageMobile = function(name) {
-  closeMobileMenu();
-  showPage(name);
-  document.querySelectorAll('[id^="mnav-"]').forEach(n => n.classList.remove('active'));
-  document.getElementById('mnav-' + name)?.classList.add('active');
-}
-
-
-  let csv = '', filename = '';
-  if (type === 'participants') {
-    filename = 'MTCA_Wellness_Registrations.csv';
-    csv = 'Name,Division,Height (cm),Baseline Weight (kg),BMI,BMI Category,Witness,Registration Date\n';
-    Object.values(participants).forEach(p => {
-      csv += [p.name, p.dept, p.height, p.baseline, p.bmi, p.bmiLabel, p.witness, p.regDate].map(v => '"' + v + '"').join(',') + '\n';
-    });
+function doExport(type){
+  var csv='',fn='';
+  if(type==='participants'){
+    fn='MTCA_Wellness_Registrations.csv';
+    csv='Name,Division,Height (cm),Baseline (kg),BMI,BMI Category,Witness,Date\n';
+    Object.values(P).forEach(function(p){csv+=[p.name,p.dept,p.height,p.baseline,p.bmi,p.bmiL,p.witness,p.regDate].map(function(v){return'"'+v+'"'}).join(',')+'\n'});
   } else {
-    filename = 'MTCA_Wellness_WeighIns.csv';
-    csv = 'Name,Week,Date,Weight (kg),Change (kg),Total Change (kg),% Change,BMI,Witness\n';
-    Object.values(weighins).sort((a,b) => a.ts - b.ts).forEach(w => {
-      csv += [w.name, w.week, w.date, w.weight, w.change, w.total, w.pct, w.bmi, w.witness].map(v => '"' + v + '"').join(',') + '\n';
-    });
+    fn='MTCA_Wellness_WeighIns.csv';
+    csv='Name,Week,Date,Weight (kg),Change,Total,% Change,BMI,Witness\n';
+    Object.values(W).sort(function(a,b){return a.ts-b.ts}).forEach(function(w){csv+=[w.name,w.week,w.date,w.weight,w.change,w.total,w.pct,w.bmi,w.witness].map(function(v){return'"'+v+'"'}).join(',')+'\n'});
   }
-  const blob = new Blob([csv], { type: 'text/csv' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href = url; a.download = filename; a.click();
-  URL.revokeObjectURL(url);
+  var b=new Blob([csv],{type:'text/csv'});
+  var u=URL.createObjectURL(b);
+  var a=document.createElement('a');a.href=u;a.download=fn;a.click();
+  URL.revokeObjectURL(u);
 }
 
-// Initialise after all functions are defined
-renderDashboard();
+// Render dashboard immediately on load
+renderDash();
 
+// Load Firebase and Chart.js asynchronously after app is ready
+function loadScript(src, cb){
+  var s=document.createElement('script');
+  s.src=src;
+  s.onload=cb;
+  s.onerror=function(){console.warn('Failed to load: '+src)};
+  document.head.appendChild(s);
+}
+
+// Load Chart.js first, then Firebase
+loadScript('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js', function(){
+  loadScript('https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js', function(){
+    loadScript('https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js', function(){
+      try {
+        firebase.initializeApp({
+          apiKey:"AIzaSyBbTBE4wvnHnH_vnK20Pc1jNAE65nPWVhw",
+          authDomain:"mtca-wellness.firebaseapp.com",
+          databaseURL:"https://mtca-wellness-default-rtdb.firebaseio.com",
+          projectId:"mtca-wellness",
+          storageBucket:"mtca-wellness.firebasestorage.app",
+          messagingSenderId:"568169511647",
+          appId:"1:568169511647:web:34c4b64f9e1ac78ad0876a"
+        });
+        window._fbdb = firebase.database();
+        fbReady = true;
+        document.getElementById('syncbar').style.display='none';
+
+        window._fbdb.ref('participants').on('value', function(snap){
+          P = snap.val() || {};
+          setStat('');
+          refresh();
+        }, function(){ setStat('off'); });
+
+        window._fbdb.ref('weighins').on('value', function(snap){
+          W = snap.val() || {};
+          refresh();
+        });
+      } catch(e){
+        setStat('off');
+        document.getElementById('syncbar').style.display='none';
+      }
+    });
+  });
+});
 </script>
 </body>
 </html>
