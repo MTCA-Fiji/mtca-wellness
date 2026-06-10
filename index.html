@@ -429,10 +429,9 @@
 </nav>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, set, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
 const firebaseConfig = {
   apiKey: "AIzaSyBbTBE4wvnHnH_vnK20Pc1jNAE65nPWVhw",
   authDomain: "mtca-wellness.firebaseapp.com",
@@ -443,8 +442,8 @@ const firebaseConfig = {
   appId: "1:568169511647:web:34c4b64f9e1ac78ad0876a"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
 
 // State
 let participants = {};
@@ -465,7 +464,7 @@ function setSyncing(state) {
 document.getElementById('loading-overlay').style.display = 'none';
 
 // Listen to Firebase in real time - data loads in background
-onValue(ref(db, 'participants'), snap => {
+db.ref('participants').on('value', snap => {
   participants = snap.val() || {};
   refreshAll();
   setSyncing('');
@@ -473,7 +472,7 @@ onValue(ref(db, 'participants'), snap => {
   setSyncing('offline');
 });
 
-onValue(ref(db, 'weighins'), snap => {
+db.ref('weighins').on('value', snap => {
   weighins = snap.val() || {};
   refreshAll();
 });
@@ -540,7 +539,7 @@ window.registerParticipant = async function() {
   const b = +fmt(bmiCalc(weight, height));
   const cat = bmiCat(b);
   setSyncing('syncing');
-  await push(ref(db, 'participants'), { name, dept, height, baseline: weight, bmi: b, bmiLabel: cat.label, bmiCls: cat.cls, witness, regDate: new Date().toLocaleDateString('en-FJ'), ts: Date.now() });
+  await db.ref('participants').push({ name, dept, height, baseline: weight, bmi: b, bmiLabel: cat.label, bmiCls: cat.cls, witness, regDate: new Date().toLocaleDateString('en-FJ'), ts: Date.now() });
   setSyncing('');
   ['reg-name','reg-height','reg-weight','reg-witness'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('reg-dept').value = '';
@@ -567,9 +566,9 @@ function renderRegTable() {
 window.deleteParticipant = async function(key, name) {
   if (!confirm('Remove ' + name + ' and all their weigh-in records?')) return;
   setSyncing('syncing');
-  await remove(ref(db, 'participants/' + key));
+  await db.ref('participants/' + key).remove();
   const toDelete = Object.entries(weighins).filter(([,w]) => w.name === name);
-  for (const [k] of toDelete) await remove(ref(db, 'weighins/' + k));
+  for (const [k] of toDelete) await db.ref('weighins/' + k).remove();
   setSyncing('');
 }
 
@@ -598,7 +597,7 @@ window.recordWeighIn = async function() {
   const pct = +fmt((total / p.baseline) * 100, 2);
   const newBMI = +fmt(bmiCalc(weight, p.height));
   setSyncing('syncing');
-  await push(ref(db, 'weighins'), { name, weight, change, total, pct, bmi: newBMI, witness, week, date: new Date().toLocaleDateString('en-FJ'), ts: Date.now() });
+  await db.ref('weighins').push({ name, weight, change, total, pct, bmi: newBMI, witness, week, date: new Date().toLocaleDateString('en-FJ'), ts: Date.now() });
   setSyncing('');
   document.getElementById('wi-weight').value = '';
   document.getElementById('wi-witness').value = '';
