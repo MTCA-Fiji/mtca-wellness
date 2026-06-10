@@ -127,6 +127,8 @@ canvas{width:100%!important;display:block}
     <div class="ni" onclick="go('progress')" id="n-progress"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>My progress</div>
     <div class="ni" onclick="go('leaderboard')" id="n-leaderboard"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="18 20 18 10"/><polyline points="12 20 12 4"/><polyline points="6 20 6 14"/></svg>Leaderboard</div>
     <div class="ni" onclick="go('export')" id="n-export"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export</div>
+    <div class="nlabel" style="margin-top:12px;">Admin</div>
+    <div class="ni" onclick="go('admin')" id="n-admin"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0 1 12 0v2"/><line x1="18" y1="8" x2="22" y2="8"/><line x1="20" y1="6" x2="20" y2="10"/></svg>Admin</div>
   </nav>
 
   <main class="main">
@@ -209,6 +211,39 @@ canvas{width:100%!important;display:block}
       </div>
     </div>
 
+
+    <div class="page" id="p-admin">
+      <div class="ptitle">Admin Panel</div>
+      <div class="psub">Coordinator access only.</div>
+      <div class="card" id="admin-gate">
+        <div id="adma"></div>
+        <div class="fg c1"><div class="field"><label>Admin password</label><input type="password" id="admpw" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')checkAdmin()"></div></div>
+        <button class="btn btnp" onclick="checkAdmin()">Login &rarr;</button>
+      </div>
+      <div id="admin-content" style="display:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+          <span style="font-size:13px;color:var(--success);font-weight:600;">&#128274; Admin session active</span>
+          <button class="btn btnd btnsm" onclick="adminLogout()">Logout</button>
+        </div>
+        <div class="card">
+          <div class="ctitle"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:15px;height:15px;color:var(--gold);"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit participant details</div>
+          <div class="fg c1"><div class="field"><label>Select participant</label><select id="adm-sel" onchange="loadAdminEdit()" style="width:100%;padding:10px 11px;border:1px solid var(--border);border-radius:var(--rs);font-size:15px;color:var(--text);background:var(--surface);"><option value="">Select participant</option></select></div></div>
+          <div id="adm-form" style="display:none;">
+            <div id="adm-alert"></div>
+            <div class="fg"><div class="field"><label>Full name</label><input type="text" id="adm-name"></div><div class="field"><label>Division</label><select id="adm-div"><option value="">Select division</option><option>Executives</option><option>Tourism Department</option><option>Na Vualiku (CPMU)</option><option>Civil Aviation Department</option><option>Corporate Services</option><option>Finance and Transport Department</option></select></div></div>
+            <div class="fg"><div class="field"><label>Height (cm)</label><input type="number" id="adm-h" inputmode="decimal"></div><div class="field"><label>Baseline weight (kg)</label><input type="number" id="adm-w" step="0.1" inputmode="decimal"></div></div>
+            <div style="display:flex;gap:10px;margin-top:4px;">
+              <button class="btn btnp" onclick="saveAdminEdit()" style="flex:1;">Save changes</button>
+              <button class="btn btnd btnsm" onclick="adminDelete()" style="flex:0;">Delete</button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ctitle"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:15px;height:15px;color:var(--gold);"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>All participants</div>
+          <div class="tw" id="adm-table"></div>
+        </div>
+      </div>
+    </div>
   </main>
 </div>
 
@@ -231,6 +266,7 @@ canvas{width:100%!important;display:block}
     <div class="ni" onclick="go('progress');closeMenu()" id="m-progress"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>My progress</div>
     <div class="ni" onclick="go('leaderboard');closeMenu()" id="m-leaderboard"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="18 20 18 10"/><polyline points="12 20 12 4"/><polyline points="6 20 6 14"/></svg>Leaderboard</div>
     <div class="ni" onclick="go('export');closeMenu()" id="m-export"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export</div>
+    <div class="ni" onclick="go('admin');closeMenu()" id="m-admin"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0 1 12 0v2"/><line x1="18" y1="8" x2="22" y2="8"/><line x1="20" y1="6" x2="20" y2="10"/></svg>Admin</div>
     <div class="mclose" onclick="closeMenu()">&#10005; Close</div>
   </div>
 </div>
@@ -255,6 +291,7 @@ function go(name) {
   if(name==='progress'){fillSel('ps');if(!unlockedUser){document.getElementById('pin-gate').style.display='block';document.getElementById('pc').style.display='none';document.getElementById('pin-logout').style.display='none';}}
   if(name==='leaderboard') renderLB();
   if(name==='export') renderExport();
+  if(name==='admin'){if(adminUnlocked){fillAdminSel();renderAdminTable();}}
   window.scrollTo(0,0);
 }
 
@@ -300,6 +337,7 @@ function refresh(){
   if(name==='progress'){fillSel('ps');if(!unlockedUser){document.getElementById('pin-gate').style.display='block';document.getElementById('pc').style.display='none';document.getElementById('pin-logout').style.display='none';}}
   if(name==='leaderboard') renderLB();
   if(name==='export') renderExport();
+  if(name==='admin'){if(adminUnlocked){fillAdminSel();renderAdminTable();}}
 }
 
 // ---- REGISTER ----
