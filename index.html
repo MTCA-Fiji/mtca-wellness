@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>MTCA Wellness Weight Challenge</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="android-chrome-192x192.png">
   <style>
     :root{--navy:#002060;--gold:#c8a84b;--bg:#f4f6fb;--card:#fff;--text:#182033;--muted:#667085;--line:#d8dfec;--good:#177245;--bad:#b42318;--info:#0b63a5;--r:12px}
     *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}button,input,select{font:inherit}
@@ -12,25 +14,17 @@
     .shell{display:grid;grid-template-columns:210px minmax(0,900px);min-height:calc(100vh - 58px)}nav{background:#fff;border-right:1px solid var(--line);padding:18px 10px}.navbtn{display:block;width:100%;text-align:left;border:0;background:none;padding:11px 12px;border-radius:8px;color:var(--muted);cursor:pointer;margin:2px 0}.navbtn.active,.navbtn:hover{background:#eaf0fa;color:var(--navy);font-weight:700}
     main{padding:24px 18px 90px}.page{display:none}.page.active{display:block}h1{font-size:22px;color:var(--navy);margin:0 0 4px}.sub{color:var(--muted);font-size:13px;margin-bottom:18px}.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:17px;margin-bottom:14px}.card h2{font-size:15px;color:var(--navy);margin:0 0 13px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}.stat{background:var(--bg);border-radius:9px;padding:13px}.stat small{color:var(--muted);text-transform:uppercase;font-size:10px}.stat b{display:block;font-size:23px;color:var(--navy);margin-top:3px}.form{display:grid;grid-template-columns:1fr 1fr;gap:12px}.full{grid-column:1/-1}label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:5px}input,select{width:100%;padding:11px;border:1px solid var(--line);border-radius:8px;background:#fff}.btn{border:1px solid var(--line);border-radius:8px;padding:11px 15px;font-weight:700;cursor:pointer}.primary{background:var(--navy);border-color:var(--navy);color:#fff}.danger{background:#fff0f0;color:var(--bad);border-color:#f3c7c7}.small{padding:6px 10px;font-size:12px}.msg{margin:10px 0;padding:10px 12px;border-radius:8px;font-size:13px;background:#e8f2ff;color:var(--info)}.msg.good{background:#e9f7ef;color:var(--good)}.msg.bad{background:#fff0f0;color:var(--bad)}
     table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:9px;border-bottom:1px solid var(--line)}th{font-size:11px;text-transform:uppercase;color:var(--muted)}.tablewrap{overflow:auto}.positive{color:var(--bad)}.negative{color:var(--good)}
-    #login{position:fixed;inset:0;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:100}.loginbox{width:min(92vw,390px);background:#fff;border-radius:16px;padding:28px;text-align:center}.loginbox h1{margin-bottom:10px}.google{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:18px}.google img{width:20px}.notice{font-size:12px;color:var(--muted);line-height:1.5}.status{font-size:11px;opacity:.7}
+    #login{position:fixed;inset:0;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:100}.loginbox{width:min(92vw,390px);background:#fff;border-radius:16px;padding:28px;text-align:center}.loginbox h1{margin-bottom:10px}.login-logo{width:120px;height:120px;display:block;margin:0 auto 16px;border-radius:24px;object-fit:cover;background:#fff;padding:8px;box-shadow:0 8px 24px rgba(0,0,0,.25)}.google{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:18px}.google img{width:20px}.notice{font-size:12px;color:var(--muted);line-height:1.5}.status{font-size:11px;opacity:.7}
     @media(max-width:720px){.shell{display:block}nav{display:flex;overflow:auto;border-right:0;border-bottom:1px solid var(--line);padding:8px;position:sticky;top:58px;z-index:8}.navbtn{white-space:nowrap;width:auto}.form{grid-template-columns:1fr}.full{grid-column:auto}main{padding:17px 12px 90px}.top small{display:none}}
   </style>
 </head>
 <body>
-<<div id="login">
+<div id="login">
   <div class="loginbox">
-    <img class="login-logo" src="MTCA%20Wellness.png" alt="MTCA Wellness App Logo">
-
+    <img class="login-logo" src="android-chrome-192x192.png" alt="MTCA Wellness App Logo">
     <h1>MTCA Wellness</h1>
-    <p class="notice">
-      Sign in with your Google account. Private weight records are visible only to you and authorised administrators.
-    </p>
-
-    <button id="googleSignIn" class="btn google">
-      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="">
-      Continue with Google
-    </button>
-
+    <p class="notice">Sign in with your Google account. Private weight records are visible only to you and authorised administrators.</p>
+    <button id="googleSignIn" class="btn google"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="">Continue with Google</button>
     <div id="loginError" class="msg bad hidden"></div>
   </div>
 </div>
