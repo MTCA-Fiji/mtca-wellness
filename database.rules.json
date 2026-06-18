@@ -1,0 +1,48 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+
+    "publicProfiles": {
+      ".read": "auth != null",
+      "$uid": {
+        ".write": "auth != null && (auth.uid === $uid || auth.token.email === 'maxrayawa51@gmail.com' || root.child('admins').child(auth.uid).exists())",
+        ".validate": "newData.hasChildren(['uid','name','department','registeredAt']) && newData.child('uid').val() === $uid && newData.child('name').isString() && newData.child('name').val().length > 1 && newData.child('name').val().length <= 80 && newData.child('department').isString() && newData.child('department').val().length > 0 && newData.child('department').val().length <= 100"
+      }
+    },
+
+    "privateProfiles": {
+      "$uid": {
+        ".read": "auth != null && (auth.uid === $uid || auth.token.email === 'maxrayawa51@gmail.com' || root.child('admins').child(auth.uid).exists())",
+        ".write": "auth != null && (auth.uid === $uid || auth.token.email === 'maxrayawa51@gmail.com' || root.child('admins').child(auth.uid).exists())",
+        ".validate": "newData.hasChildren(['uid','email','heightCm','baselineKg','baselineBmi','witness','registeredAt']) && newData.child('uid').val() === $uid && newData.child('email').val() === auth.token.email && newData.child('heightCm').isNumber() && newData.child('heightCm').val() >= 100 && newData.child('heightCm').val() <= 250 && newData.child('baselineKg').isNumber() && newData.child('baselineKg').val() >= 25 && newData.child('baselineKg').val() <= 400 && newData.child('witness').isString() && newData.child('witness').val().length > 1 && newData.child('witness').val().length <= 80"
+      }
+    },
+
+    "weighins": {
+      "$uid": {
+        ".read": "auth != null && (auth.uid === $uid || auth.token.email === 'maxrayawa51@gmail.com' || root.child('admins').child(auth.uid).exists())",
+        "$entry": {
+          ".write": "auth != null && (auth.uid === $uid || auth.token.email === 'maxrayawa51@gmail.com' || root.child('admins').child(auth.uid).exists())",
+          ".validate": "newData.hasChildren(['uid','weightKg','bmi','week','witness','createdAt']) && newData.child('uid').val() === $uid && newData.child('weightKg').isNumber() && newData.child('weightKg').val() >= 25 && newData.child('weightKg').val() <= 400 && newData.child('bmi').isNumber() && newData.child('week').isNumber() && newData.child('week').val() >= 1 && newData.child('witness').isString() && newData.child('witness').val().length > 1 && newData.child('witness').val().length <= 80"
+        }
+      }
+    },
+
+    "leaderboard": {
+      ".read": "auth != null",
+      "$uid": {
+        ".write": "auth != null && (auth.uid === $uid || auth.token.email === 'maxrayawa51@gmail.com' || root.child('admins').child(auth.uid).exists())",
+        ".validate": "newData.hasChildren(['uid','name','department','percentageChange','weeks']) && newData.child('uid').val() === $uid && newData.child('name').isString() && newData.child('department').isString() && newData.child('percentageChange').isNumber() && newData.child('percentageChange').val() >= -80 && newData.child('percentageChange').val() <= 200 && newData.child('weeks').isNumber() && newData.child('weeks').val() >= 0"
+      }
+    },
+
+    "admins": {
+      ".read": "auth != null && (auth.token.email === 'maxrayawa51@gmail.com' || root.child('admins').child(auth.uid).exists())",
+      "$uid": {
+        ".write": "auth != null && auth.token.email === 'maxrayawa51@gmail.com'",
+        ".validate": "newData.hasChildren(['uid','email','name','addedAt','addedBy']) && newData.child('uid').val() === $uid && newData.child('email').isString()"
+      }
+    }
+  }
+}
