@@ -1,22 +1,39 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="referrer" content="strict-origin-when-cross-origin">
-  <title>MTCA Wellness Weight Challenge</title>
-  <style>
-    :root{--navy:#002060;--gold:#c8a84b;--bg:#f4f6fb;--card:#fff;--text:#182033;--muted:#667085;--line:#d8dfec;--good:#177245;--bad:#b42318;--info:#0b63a5;--r:12px}
-    *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}button,input,select{font:inherit}
-    .hidden{display:none!important}.top{height:58px;background:var(--navy);color:#fff;display:flex;align-items:center;padding:0 18px;position:sticky;top:0;z-index:10}.top strong{font-size:15px}.top small{display:block;opacity:.65}.top .right{margin-left:auto;display:flex;align-items:center;gap:10px}.chip{border:0;background:rgba(255,255,255,.14);color:#fff;border-radius:30px;padding:7px 12px;cursor:pointer}
-    .shell{display:grid;grid-template-columns:210px minmax(0,900px);min-height:calc(100vh - 58px)}nav{background:#fff;border-right:1px solid var(--line);padding:18px 10px}.navbtn{display:block;width:100%;text-align:left;border:0;background:none;padding:11px 12px;border-radius:8px;color:var(--muted);cursor:pointer;margin:2px 0}.navbtn.active,.navbtn:hover{background:#eaf0fa;color:var(--navy);font-weight:700}
-    main{padding:24px 18px 90px}.page{display:none}.page.active{display:block}h1{font-size:22px;color:var(--navy);margin:0 0 4px}.sub{color:var(--muted);font-size:13px;margin-bottom:18px}.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:17px;margin-bottom:14px}.card h2{font-size:15px;color:var(--navy);margin:0 0 13px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}.stat{background:var(--bg);border-radius:9px;padding:13px}.stat small{color:var(--muted);text-transform:uppercase;font-size:10px}.stat b{display:block;font-size:23px;color:var(--navy);margin-top:3px}.form{display:grid;grid-template-columns:1fr 1fr;gap:12px}.full{grid-column:1/-1}label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:5px}input,select{width:100%;padding:11px;border:1px solid var(--line);border-radius:8px;background:#fff}.btn{border:1px solid var(--line);border-radius:8px;padding:11px 15px;font-weight:700;cursor:pointer}.primary{background:var(--navy);border-color:var(--navy);color:#fff}.danger{background:#fff0f0;color:var(--bad);border-color:#f3c7c7}.small{padding:6px 10px;font-size:12px}.msg{margin:10px 0;padding:10px 12px;border-radius:8px;font-size:13px;background:#e8f2ff;color:var(--info)}.msg.good{background:#e9f7ef;color:var(--good)}.msg.bad{background:#fff0f0;color:var(--bad)}
-    table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:9px;border-bottom:1px solid var(--line)}th{font-size:11px;text-transform:uppercase;color:var(--muted)}.tablewrap{overflow:auto}.positive{color:var(--bad)}.negative{color:var(--good)}
-    #login{position:fixed;inset:0;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:100}.loginbox{width:min(92vw,390px);background:#fff;border-radius:16px;padding:28px;text-align:center}.loginbox h1{margin-bottom:10px}.google{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:18px}.google img{width:20px}.notice{font-size:12px;color:var(--muted);line-height:1.5}.status{font-size:11px;opacity:.7}
-    @media(max-width:720px){.shell{display:block}nav{display:flex;overflow:auto;border-right:0;border-bottom:1px solid var(--line);padding:8px;position:sticky;top:58px;z-index:8}.navbtn{white-space:nowrap;width:auto}.form{grid-template-columns:1fr}.full{grid-column:auto}main{padding:17px 12px 90px}.top small{display:none}}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>MTCA Wellness Weight Challenge</title>
+<style>
+:root{--navy:#002060;--gold:#c8a84b;--bg:#f4f6fb;--card:#fff;--text:#182033;--muted:#667085;--line:#d8dfec;--good:#177245;--bad:#b42318;--info:#0b63a5;--r:12px}
+*{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}button,input,select{font:inherit}
+.hidden{display:none!important}.top{height:58px;background:var(--navy);color:#fff;display:flex;align-items:center;padding:0 18px;position:sticky;top:0;z-index:10}.top strong{font-size:15px}.top small{display:block;opacity:.65}.top .right{margin-left:auto;display:flex;align-items:center;gap:10px}.chip{border:0;background:rgba(255,255,255,.14);color:#fff;border-radius:30px;padding:7px 12px;cursor:pointer}
+.shell{display:grid;grid-template-columns:210px minmax(0,900px);min-height:calc(100vh - 58px)}nav{background:#fff;border-right:1px solid var(--line);padding:18px 10px}.navbtn{display:block;width:100%;text-align:left;border:0;background:none;padding:11px 12px;border-radius:8px;color:var(--muted);cursor:pointer;margin:2px 0}.navbtn.active,.navbtn:hover{background:#eaf0fa;color:var(--navy);font-weight:700}
+main{padding:24px 18px 90px}.page{display:none}.page.active{display:block}h1{font-size:22px;color:var(--navy);margin:0 0 4px}.sub{color:var(--muted);font-size:13px;margin-bottom:18px}.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:17px;margin-bottom:14px}.card h2{font-size:15px;color:var(--navy);margin:0 0 13px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}.stat{background:var(--bg);border-radius:9px;padding:13px}.stat small{color:var(--muted);text-transform:uppercase;font-size:10px}.stat b{display:block;font-size:23px;color:var(--navy);margin-top:3px}.form{display:grid;grid-template-columns:1fr 1fr;gap:12px}.full{grid-column:1/-1}label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:5px}input,select{width:100%;padding:11px;border:1px solid var(--line);border-radius:8px;background:#fff}.btn{border:1px solid var(--line);border-radius:8px;padding:11px 15px;font-weight:700;cursor:pointer}.primary{background:var(--navy);border-color:var(--navy);color:#fff}.danger{background:#fff0f0;color:var(--bad);border-color:#f3c7c7}.small{padding:6px 10px;font-size:12px}.msg{margin:10px 0;padding:10px 12px;border-radius:8px;font-size:13px;background:#e8f2ff;color:var(--info)}.msg.good{background:#e9f7ef;color:var(--good)}.msg.bad{background:#fff0f0;color:var(--bad)}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:9px;border-bottom:1px solid var(--line)}th{font-size:11px;text-transform:uppercase;color:var(--muted)}.tablewrap{overflow:auto}.positive{color:var(--bad)}.negative{color:var(--good)}
+#login{position:fixed;inset:0;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:100}.loginbox{width:min(92vw,390px);background:#fff;border-radius:16px;padding:28px;text-align:center}.loginbox h1{margin-bottom:10px}.google{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:18px}.google img{width:20px}.notice{font-size:12px;color:var(--muted);line-height:1.5}.status{font-size:11px;opacity:.7}
+
+/* ── New indicator styles ── */
+.badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.4px;vertical-align:middle}
+.bmi-under{background:#e8f0fe;color:#1a56db}
+.bmi-good{background:#e9f7ef;color:#177245}
+.bmi-warn{background:#fff8e1;color:#b45309}
+.bmi-bad{background:#fff0f0;color:#b42318}
+.arrow-up{color:#b42318;font-size:15px;font-weight:700}
+.arrow-down{color:#177245;font-size:15px;font-weight:700}
+.arrow-neutral{color:#667085;font-size:15px}
+.pct-loss{color:#177245;font-weight:700}
+.pct-gain{color:#b42318;font-weight:700}
+.pct-neutral{color:#667085;font-weight:700}
+.loading-msg{color:var(--muted);font-size:13px;padding:12px 0}
+.admin-section-title{font-size:15px;color:var(--navy);font-weight:700;margin:0 0 13px}
+
+@media(max-width:720px){.shell{display:block}nav{display:flex;overflow:auto;border-right:0;border-bottom:1px solid var(--line);padding:8px;position:sticky;top:58px;z-index:8}.navbtn{white-space:nowrap;width:auto}.form{grid-template-columns:1fr}.full{grid-column:auto}main{padding:17px 12px 90px}.top small{display:none}}
+</style>
 </head>
 <body>
+
 <div id="login">
   <div class="loginbox">
     <h1>MTCA Wellness</h1>
@@ -25,7 +42,12 @@
     <div id="loginError" class="msg bad hidden"></div>
   </div>
 </div>
-<header class="top"><div><strong>MTCA Wellness Weight Challenge</strong><small>Secure Firebase edition</small></div><div class="right"><span id="status" class="status">Connecting</span><button id="signOut" class="chip hidden">Sign out</button></div></header>
+
+<header class="top">
+  <div><strong>MTCA Wellness Weight Challenge</strong><small>Secure Firebase edition</small></div>
+  <div class="right"><span id="status" class="status">Connecting</span><button id="signOut" class="chip hidden">Sign out</button></div>
+</header>
+
 <div class="shell">
   <nav>
     <button class="navbtn active" data-page="dashboard">Dashboard</button>
@@ -35,53 +57,708 @@
     <button class="navbtn" data-page="leaderboard">Leaderboard</button>
     <button id="adminNav" class="navbtn hidden" data-page="admin">Administration</button>
   </nav>
+
   <main>
-    <section id="dashboard" class="page active"><h1>Dashboard</h1><div class="sub">Programme overview without exposing private measurements.</div><div id="dashboardStats" class="grid"></div><div class="card"><h2>Registered participants</h2><div id="participantList" class="tablewrap"></div></div></section>
-    <section id="register" class="page"><h1>Register</h1><div class="sub">Your baseline information is stored privately.</div><div class="card"><form id="registerForm" class="form"><div><label>Full name</label><input id="regName" maxlength="80" required></div><div><label>Division / Department</label><select id="regDepartment" required><option value="">Select Division / Department</option><option value="Corporate Services">Corporate Services</option><option value="Tourism Department">Tourism Department</option><option value="Civil Aviation Department">Civil Aviation Department</option><option value="Finance and Transport Department">Finance and Transport Department</option><option value="Policy and Standards Department">Policy and Standards Department</option><option value="Executive">Executive</option></select></div><div><label>Height (cm)</label><input id="regHeight" type="number" min="100" max="250" step="0.1" required></div><div><label>Baseline weight (kg)</label><input id="regWeight" type="number" min="25" max="400" step="0.1" required></div><div class="full"><label>Witness</label><input id="regWitness" maxlength="80" required></div><button class="btn primary full" type="submit">Register securely</button></form><div id="registerMsg"></div></div></section>
-    <section id="weighin" class="page"><h1>Weigh-in</h1><div class="sub">You can record only your own entry unless you are an administrator.</div><div class="card"><form id="weighForm" class="form"><div id="adminParticipantWrap" class="full hidden"><label>Participant</label><select id="weighParticipant"></select></div><div><label>Weight (kg)</label><input id="weighWeight" type="number" min="25" max="400" step="0.1" required></div><div><label>Witness</label><input id="weighWitness" maxlength="80" required></div><button class="btn primary full" type="submit">Record weigh-in</button></form><div id="weighMsg"></div></div></section>
-    <section id="progress" class="page"><h1>My progress</h1><div class="sub">Your private measurement history.</div><div id="progressContent"></div></section>
-    <section id="leaderboard" class="page"><h1>Leaderboard</h1><div class="sub">Ranks are based on percentage change. Exact weights are not displayed.</div><div class="card"><div id="leaderboardTable" class="tablewrap"></div></div></section>
-    <section id="admin" class="page"><h1>Administration</h1><div class="sub">Restricted to the master administrator and assigned administrators.</div><div class="card"><h2>Assign administrator</h2><p class="notice">Only the master administrator can change administrator access. The person must sign in and register first.</p><select id="adminCandidate"></select><button id="addAdmin" class="btn primary" style="margin-top:10px">Grant admin access</button><div id="adminMsg"></div></div><div class="card"><h2>Administrators</h2><div id="adminList" class="tablewrap"></div></div><div class="card"><h2>Exports</h2><button id="exportParticipants" class="btn">Download participant CSV</button> <button id="exportWeighins" class="btn">Download weigh-in CSV</button></div></section>
+
+    <!-- DASHBOARD -->
+    <section id="dashboard" class="page active">
+      <h1>Dashboard</h1>
+      <div class="sub">Programme overview without exposing private measurements.</div>
+      <div id="dashboardStats" class="grid"></div>
+      <div class="card">
+        <h2>Registered participants</h2>
+        <div id="participantList" class="tablewrap"></div>
+      </div>
+    </section>
+
+    <!-- REGISTER -->
+    <section id="register" class="page">
+      <h1>Register</h1>
+      <div class="sub">Your baseline information is stored privately.</div>
+      <div class="card">
+        <form id="registerForm" class="form">
+          <div><label>Full name</label><input id="regName" maxlength="80" required></div>
+          <div>
+            <label>Division / Department</label>
+            <select id="regDepartment" required>
+              <option value="">Select Division / Department</option>
+              <option value="Corporate Services">Corporate Services</option>
+              <option value="Tourism Department">Tourism Department</option>
+              <option value="Civil Aviation Department">Civil Aviation Department</option>
+              <option value="Finance and Transport Department">Finance and Transport Department</option>
+              <option value="Policy and Standards Department">Policy and Standards Department</option>
+              <option value="Executive">Executive</option>
+            </select>
+          </div>
+          <div><label>Height (cm)</label><input id="regHeight" type="number" min="100" max="250" step="0.1" required></div>
+          <div><label>Baseline weight (kg)</label><input id="regWeight" type="number" min="25" max="400" step="0.1" required></div>
+          <div class="full"><label>Witness</label><input id="regWitness" maxlength="80" required></div>
+          <button class="btn primary full" type="submit">Register securely</button>
+        </form>
+        <div id="registerMsg"></div>
+      </div>
+    </section>
+
+    <!-- WEIGH-IN -->
+    <section id="weighin" class="page">
+      <h1>Weigh-in</h1>
+      <div class="sub">You can record only your own entry unless you are an administrator.</div>
+      <div class="card">
+        <form id="weighForm" class="form">
+          <div id="adminParticipantWrap" class="full hidden">
+            <label>Participant</label>
+            <select id="weighParticipant"></select>
+          </div>
+          <div><label>Weight (kg)</label><input id="weighWeight" type="number" min="25" max="400" step="0.1" required></div>
+          <div><label>Witness</label><input id="weighWitness" maxlength="80" required></div>
+          <button class="btn primary full" type="submit">Record weigh-in</button>
+        </form>
+        <div id="weighMsg"></div>
+      </div>
+    </section>
+
+    <!-- MY PROGRESS -->
+    <section id="progress" class="page">
+      <h1>My progress</h1>
+      <div class="sub">Your private measurement history.</div>
+      <div id="progressContent"></div>
+    </section>
+
+    <!-- LEADERBOARD -->
+    <section id="leaderboard" class="page">
+      <h1>Leaderboard</h1>
+      <div class="sub">Ranks are based on percentage change from baseline. Exact weights are not displayed.</div>
+      <div class="card">
+        <div id="leaderboardTable" class="tablewrap"></div>
+      </div>
+    </section>
+
+    <!-- ADMIN -->
+    <section id="admin" class="page">
+      <h1>Administration</h1>
+      <div class="sub">Restricted to the master administrator and assigned administrators.</div>
+
+      <div class="card">
+        <h2>Assign administrator</h2>
+        <p class="notice">Only the master administrator can change administrator access. The person must sign in and register first.</p>
+        <select id="adminCandidate"></select>
+        <button id="addAdmin" class="btn primary" style="margin-top:10px">Grant admin access</button>
+        <div id="adminMsg"></div>
+      </div>
+
+      <div class="card">
+        <h2>Administrators</h2>
+        <div id="adminList" class="tablewrap"></div>
+      </div>
+
+      <div class="card">
+        <h2>View participant progress</h2>
+        <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
+          <div style="flex:1;min-width:200px">
+            <label>Select participant</label>
+            <select id="adminViewParticipant"></select>
+          </div>
+          <button id="adminViewBtn" class="btn primary" style="margin-bottom:0">View progress</button>
+        </div>
+        <div id="adminProgressView" style="margin-top:18px"></div>
+      </div>
+
+      <div class="card">
+        <h2>Exports</h2>
+        <button id="exportParticipants" class="btn">Download participant CSV</button>
+        <button id="exportWeighins" class="btn" style="margin-left:8px">Download weigh-in CSV</button>
+      </div>
+    </section>
+
   </main>
 </div>
+
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signInWithRedirect, signOut as firebaseSignOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import { getDatabase, ref, get, set, push, update, remove, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js";
-import { firebaseConfig, MASTER_ADMIN_EMAIL } from "./firebase-config.js";
+import { initializeApp }                                             from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getAuth, GoogleAuthProvider, onAuthStateChanged,
+         signInWithPopup, signInWithRedirect,
+         signOut as firebaseSignOut }                                from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getDatabase, ref, get, set, push, update, remove,
+         onValue, serverTimestamp }                                  from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js";
+import { firebaseConfig, MASTER_ADMIN_EMAIL }                       from "./firebase-config.js";
 
-const app=initializeApp(firebaseConfig), auth=getAuth(app), db=getDatabase(app), provider=new GoogleAuthProvider();
-provider.setCustomParameters({prompt:"select_account"});
-const state={user:null,isAdmin:false,isMaster:false,publicProfiles:{},leaderboard:{},myPrivate:null,myWeighins:{},admins:{}};
-const $=id=>document.getElementById(id); const esc=v=>String(v??"").replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[c]));
-const bmi=(w,h)=>+(w/((h/100)**2)).toFixed(1); const today=()=>new Intl.DateTimeFormat("en-FJ",{dateStyle:"medium"}).format(new Date());
-function message(id,text,type=""){const el=$(id);el.className="msg "+type;el.textContent=text;}
-function clearMessage(id){const el=$(id);el.className="";el.textContent="";}
-function download(name,rows){const csv=rows.map(r=>r.map(v=>'"'+String(v??"").replaceAll('"','""')+'"').join(",")).join("\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download=name;a.click();URL.revokeObjectURL(a.href);}
-function isValidNumber(v,min,max){return Number.isFinite(v)&&v>=min&&v<=max;}
-function showPage(name){document.querySelectorAll(".page").forEach(x=>x.classList.toggle("active",x.id===name));document.querySelectorAll(".navbtn").forEach(x=>x.classList.toggle("active",x.dataset.page===name));if(name==="progress")renderProgress();if(name==="leaderboard")renderLeaderboard();if(name==="admin")renderAdmin();}
-document.querySelectorAll(".navbtn").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
+const app      = initializeApp(firebaseConfig);
+const auth     = getAuth(app);
+const db       = getDatabase(app);
+const provider = new GoogleAuthProvider();
+provider.setCustomParameters({ prompt: "select_account" });
 
-$("googleSignIn").addEventListener("click",async()=>{clearMessage("loginError");try{await signInWithPopup(auth,provider);}catch(e){if(["auth/popup-blocked","auth/operation-not-supported-in-this-environment","auth/cancelled-popup-request"].includes(e.code)){await signInWithRedirect(auth,provider);return;}message("loginError",friendlyAuthError(e),"bad");}});
-$("signOut").addEventListener("click",()=>firebaseSignOut(auth));
-function friendlyAuthError(e){return {"auth/unauthorized-domain":"This website domain is not authorised in Firebase Authentication.","auth/operation-not-allowed":"Google sign-in is not enabled in Firebase.","auth/network-request-failed":"Network error. Check your connection.","auth/popup-closed-by-user":"Google sign-in was cancelled."}[e.code]||"Google sign-in failed: "+e.message;}
+/* ── State ── */
+const state = {
+  user: null,
+  isAdmin: false,
+  isMaster: false,
+  publicProfiles: {},
+  leaderboard: {},
+  myPrivate: null,
+  myWeighins: {},
+  admins: {},
+  _viewPrivate: null,
+  _viewWeighins: {}
+};
 
-onAuthStateChanged(auth,async user=>{detach();state.user=user;if(!user){resetState();$("login").style.display="flex";$("signOut").classList.add("hidden");return;}$("login").style.display="none";$("signOut").classList.remove("hidden");$("status").textContent=user.email;state.isMaster=(user.email||"").toLowerCase()===MASTER_ADMIN_EMAIL.toLowerCase();state.isAdmin=state.isMaster||(await get(ref(db,`admins/${user.uid}`))).exists();$("adminNav").classList.toggle("hidden",!state.isAdmin);$("adminParticipantWrap").classList.toggle("hidden",!state.isAdmin);startListeners();});
-let unsub=[];function detach(){unsub.forEach(f=>f());unsub=[];}function resetState(){detach();Object.assign(state,{isAdmin:false,isMaster:false,publicProfiles:{},leaderboard:{},myPrivate:null,myWeighins:{},admins:{}});$("status").textContent="Signed out";}
-function startListeners(){const uid=state.user.uid;unsub.push(onValue(ref(db,"publicProfiles"),s=>{state.publicProfiles=s.val()||{};renderDashboard();fillSelectors();}));unsub.push(onValue(ref(db,"leaderboard"),s=>{state.leaderboard=s.val()||{};renderDashboard();renderLeaderboard();}));unsub.push(onValue(ref(db,`privateProfiles/${uid}`),s=>{state.myPrivate=s.val()||null;renderProgress();}));unsub.push(onValue(ref(db,`weighins/${uid}`),s=>{state.myWeighins=s.val()||{};renderProgress();}));if(state.isAdmin)unsub.push(onValue(ref(db,"admins"),s=>{state.admins=s.val()||{};renderAdmin();}));}
+/* ── Utilities ── */
+const $ = id => document.getElementById(id);
+const esc = v => String(v ?? "").replace(/[&<>'"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[c]));
 
-$("registerForm").addEventListener("submit",async e=>{e.preventDefault();clearMessage("registerMsg");const uid=state.user.uid,name=$("regName").value.trim(),department=$("regDepartment").value.trim(),height=Number($("regHeight").value),weight=Number($("regWeight").value),witness=$("regWitness").value.trim();if(name.length<2||department.length<1||witness.length<2||!isValidNumber(height,100,250)||!isValidNumber(weight,25,400)){message("registerMsg","Check all fields and use realistic height and weight values.","bad");return;}if((await get(ref(db,`privateProfiles/${uid}`))).exists()){message("registerMsg","You are already registered.","bad");return;}const registeredAt=Date.now(),baseBmi=bmi(weight,height),updates={};updates[`publicProfiles/${uid}`]={uid,name,department,registeredAt};updates[`privateProfiles/${uid}`]={uid,email:state.user.email,heightCm:height,baselineKg:weight,baselineBmi:baseBmi,witness,registeredAt,registeredDate:today()};updates[`leaderboard/${uid}`]={uid,name,department,percentageChange:0,weeks:0,updatedAt:registeredAt};try{await update(ref(db),updates);e.target.reset();message("registerMsg","Registration completed securely.","good");}catch(err){message("registerMsg","Registration failed: "+err.message,"bad");}});
+const bmi = (w, h) => +(w / ((h / 100) ** 2)).toFixed(1);
 
-$("weighForm").addEventListener("submit",async e=>{e.preventDefault();clearMessage("weighMsg");let uid=state.user.uid;if(state.isAdmin&&$("weighParticipant").value)uid=$("weighParticipant").value;const weight=Number($("weighWeight").value),witness=$("weighWitness").value.trim();if(!isValidNumber(weight,25,400)||witness.length<2){message("weighMsg","Enter a valid weight and witness name.","bad");return;}try{const [pubSnap,privSnap,wSnap]=await Promise.all([get(ref(db,`publicProfiles/${uid}`)),get(ref(db,`privateProfiles/${uid}`)),get(ref(db,`weighins/${uid}`))]);if(!pubSnap.exists()||!privSnap.exists())throw new Error("Participant is not registered.");const pub=pubSnap.val(),priv=privSnap.val(),entries=Object.values(wSnap.val()||{}).sort((a,b)=>a.createdAt-b.createdAt),previous=entries.length?entries.at(-1).weightKg:priv.baselineKg,week=entries.length+1,total=+(weight-priv.baselineKg).toFixed(1),change=+(weight-previous).toFixed(1),percentageChange=+((total/priv.baselineKg)*100).toFixed(2),entry={uid,weightKg:weight,bmi:bmi(weight,priv.heightCm),week,witness,changeKg:change,totalChangeKg:total,percentageChange,date:today(),createdAt:Date.now(),recordedByUid:state.user.uid,recordedByEmail:state.user.email};const key=push(ref(db,`weighins/${uid}`)).key;const updates={};updates[`weighins/${uid}/${key}`]=entry;updates[`leaderboard/${uid}`]={uid,name:pub.name,department:pub.department,percentageChange,weeks:week,updatedAt:Date.now()};await update(ref(db),updates);e.target.reset();message("weighMsg",`Week ${week} weigh-in recorded for ${pub.name}.`,"good");}catch(err){message("weighMsg","Weigh-in failed: "+err.message,"bad");}});
+function bmiCategory(b) {
+  const n = Number(b);
+  if (!isFinite(n)) return { label: "Unknown", cls: "bmi-under" };
+  if (n < 18.5) return { label: "Underweight", cls: "bmi-under" };
+  if (n < 25)   return { label: "Healthy",     cls: "bmi-good"  };
+  if (n < 30)   return { label: "Overweight",  cls: "bmi-warn"  };
+  return               { label: "Obese",        cls: "bmi-bad"   };
+}
 
-function renderDashboard(){const profiles=Object.values(state.publicProfiles);const lb=Object.values(state.leaderboard);const totalWeeks=lb.reduce((n,x)=>n+(Number(x.weeks)||0),0);$("dashboardStats").innerHTML=`<div class="stat"><small>Participants</small><b>${profiles.length}</b></div><div class="stat"><small>Weigh-ins logged</small><b>${totalWeeks}</b></div><div class="stat"><small>Your access</small><b style="font-size:16px">${state.isAdmin?"Administrator":"Participant"}</b></div>`;$("participantList").innerHTML=profiles.length?`<table><thead><tr><th>Name</th><th>Division</th></tr></thead><tbody>${profiles.sort((a,b)=>a.name.localeCompare(b.name)).map(p=>`<tr><td><strong>${esc(p.name)}</strong></td><td>${esc(p.department)}</td></tr>`).join("")}</tbody></table>`:"No participants registered.";}
-function fillSelectors(){const options=Object.values(state.publicProfiles).sort((a,b)=>a.name.localeCompare(b.name)).map(p=>`<option value="${esc(p.uid)}">${esc(p.name)} — ${esc(p.department)}</option>`).join("");$("weighParticipant").innerHTML=`<option value="">Select participant</option>${options}`;$("adminCandidate").innerHTML=`<option value="">Select registered participant</option>${options}`;}
-function renderProgress(){const box=$("progressContent");if(!state.user)return;if(!state.myPrivate){box.innerHTML='<div class="card">You are not registered yet.</div>';return;}const pub=state.publicProfiles[state.user.uid]||{},entries=Object.values(state.myWeighins).sort((a,b)=>a.createdAt-b.createdAt),latest=entries.at(-1),current=latest?.weightKg??state.myPrivate.baselineKg,total=latest?.totalChangeKg??0,pct=latest?.percentageChange??0;box.innerHTML=`<div class="card"><h2>${esc(pub.name||state.user.displayName||"My progress")}</h2><div class="grid"><div class="stat"><small>Current</small><b>${current} kg</b></div><div class="stat"><small>Baseline</small><b>${state.myPrivate.baselineKg} kg</b></div><div class="stat"><small>Total change</small><b class="${total<0?'negative':total>0?'positive':''}">${total>0?'+':''}${total} kg</b></div><div class="stat"><small>Percentage</small><b>${pct>0?'+':''}${pct}%</b></div><div class="stat"><small>BMI</small><b>${latest?.bmi??state.myPrivate.baselineBmi}</b></div><div class="stat"><small>Weeks</small><b>${entries.length}</b></div></div></div><div class="card"><h2>Weigh-in history</h2>${entries.length?`<div class="tablewrap"><table><thead><tr><th>Week</th><th>Date</th><th>Weight</th><th>Change</th><th>Witness</th></tr></thead><tbody>${entries.slice().reverse().map(x=>`<tr><td>${x.week}</td><td>${esc(x.date)}</td><td>${x.weightKg} kg</td><td>${x.changeKg>0?'+':''}${x.changeKg} kg</td><td>${esc(x.witness)}</td></tr>`).join("")}</tbody></table></div>`:"No weigh-ins recorded."}</div>`;}
-function renderLeaderboard(){const rows=Object.values(state.leaderboard).filter(x=>Number(x.weeks)>0).sort((a,b)=>a.percentageChange-b.percentageChange);$("leaderboardTable").innerHTML=rows.length?`<table><thead><tr><th>Rank</th><th>Name</th><th>Division</th><th>% change</th><th>Weeks</th></tr></thead><tbody>${rows.map((x,i)=>`<tr><td>${i+1}</td><td><strong>${esc(x.name)}</strong></td><td>${esc(x.department)}</td><td class="${x.percentageChange<0?'negative':'positive'}">${x.percentageChange>0?'+':''}${x.percentageChange}%</td><td>${x.weeks}</td></tr>`).join("")}</tbody></table>`:"No qualifying weigh-ins yet.";}
-function renderAdmin(){if(!state.isAdmin)return;const admins=Object.values(state.admins);$("adminList").innerHTML=`<table><thead><tr><th>Name</th><th>Email</th><th></th></tr></thead><tbody><tr><td>Master administrator</td><td>${esc(MASTER_ADMIN_EMAIL)}</td><td></td></tr>${admins.map(a=>`<tr><td>${esc(a.name)}</td><td>${esc(a.email)}</td><td>${state.isMaster?`<button class="btn danger small remove-admin" data-uid="${esc(a.uid)}">Remove</button>`:""}</td></tr>`).join("")}</tbody></table>`;document.querySelectorAll(".remove-admin").forEach(b=>b.addEventListener("click",async()=>{if(confirm("Remove this administrator?"))await remove(ref(db,`admins/${b.dataset.uid}`));}));$("addAdmin").classList.toggle("hidden",!state.isMaster);$("adminCandidate").disabled=!state.isMaster;}
-$("addAdmin").addEventListener("click",async()=>{clearMessage("adminMsg");if(!state.isMaster){message("adminMsg","Only the master administrator can grant access.","bad");return;}const uid=$("adminCandidate").value,p=state.publicProfiles[uid];if(!uid||!p){message("adminMsg","Select a registered participant.","bad");return;}try{const priv=(await get(ref(db,`privateProfiles/${uid}`))).val();await set(ref(db,`admins/${uid}`),{uid,email:priv.email,name:p.name,addedAt:Date.now(),addedBy:state.user.email});message("adminMsg","Administrator access granted.","good");}catch(e){message("adminMsg","Could not grant access: "+e.message,"bad");}});
-$("exportParticipants").addEventListener("click",async()=>{if(!state.isAdmin)return;const rows=[["Name","Division","Email","Height cm","Baseline kg","Registered"]];for(const p of Object.values(state.publicProfiles).sort((a,b)=>a.name.localeCompare(b.name))){const priv=(await get(ref(db,`privateProfiles/${p.uid}`))).val();rows.push([p.name,p.department,priv?.email,priv?.heightCm,priv?.baselineKg,priv?.registeredDate]);}download("MTCA_Wellness_Registrations.csv",rows);});
-$("exportWeighins").addEventListener("click",async()=>{if(!state.isAdmin)return;const rows=[["Name","Week","Date","Weight kg","Change kg","Total change kg","Percentage","BMI","Witness"]];for(const p of Object.values(state.publicProfiles).sort((a,b)=>a.name.localeCompare(b.name))){const entries=Object.values((await get(ref(db,`weighins/${p.uid}`))).val()||{}).sort((a,b)=>a.createdAt-b.createdAt);entries.forEach(x=>rows.push([p.name,x.week,x.date,x.weightKg,x.changeKg,x.totalChangeKg,x.percentageChange,x.bmi,x.witness]));}download("MTCA_Wellness_WeighIns.csv",rows);});
+function movementArrow(changeKg) {
+  const n = Number(changeKg);
+  if (n < -0.05) return '<span class="arrow-down" title="Loss">&#9660;</span>';
+  if (n >  0.05) return '<span class="arrow-up"   title="Gain">&#9650;</span>';
+  return                '<span class="arrow-neutral" title="No change">&#9644;</span>';
+}
+
+function pctLabel(pct) {
+  const n = Number(pct);
+  if (n < -0.05) return `<span class="pct-loss">${n}%</span>`;
+  if (n >  0.05) return `<span class="pct-gain">+${n}%</span>`;
+  return                `<span class="pct-neutral">0.00%</span>`;
+}
+
+const today = () => new Intl.DateTimeFormat("en-FJ", { dateStyle: "medium" }).format(new Date());
+
+function message(id, text, type = "") {
+  const el = $(id);
+  el.className = "msg " + type;
+  el.textContent = text;
+}
+
+function clearMessage(id) {
+  const el = $(id);
+  el.className = "";
+  el.textContent = "";
+}
+
+function download(name, rows) {
+  const csv = rows.map(r => r.map(v => '"' + String(v ?? "").replaceAll('"', '""') + '"').join(",")).join("\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+  a.download = name;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function isValidNumber(v, min, max) {
+  return Number.isFinite(v) && v >= min && v <= max;
+}
+
+/* ── Preserve Firebase keys on weigh-in snapshots ── */
+function parseWeighins(snapshot) {
+  const raw = snapshot.val() || {};
+  return Object.fromEntries(
+    Object.entries(raw).map(([k, v]) => [k, { ...v, key: k }])
+  );
+}
+
+/* ── Navigation ── */
+function showPage(name) {
+  document.querySelectorAll(".page").forEach(x => x.classList.toggle("active", x.id === name));
+  document.querySelectorAll(".navbtn").forEach(x => x.classList.toggle("active", x.dataset.page === name));
+  if (name === "progress")   renderProgress();
+  if (name === "leaderboard") renderLeaderboard();
+  if (name === "admin")      renderAdmin();
+}
+
+document.querySelectorAll(".navbtn").forEach(b => b.addEventListener("click", () => showPage(b.dataset.page)));
+
+/* ── Auth ── */
+$("googleSignIn").addEventListener("click", async () => {
+  clearMessage("loginError");
+  try {
+    await signInWithPopup(auth, provider);
+  } catch(e) {
+    if (["auth/popup-blocked","auth/operation-not-supported-in-this-environment","auth/cancelled-popup-request"].includes(e.code)) {
+      await signInWithRedirect(auth, provider);
+      return;
+    }
+    message("loginError", friendlyAuthError(e), "bad");
+  }
+});
+
+$("signOut").addEventListener("click", () => firebaseSignOut(auth));
+
+function friendlyAuthError(e) {
+  return {
+    "auth/unauthorized-domain":          "This website domain is not authorised in Firebase Authentication.",
+    "auth/operation-not-allowed":        "Google sign-in is not enabled in Firebase.",
+    "auth/network-request-failed":       "Network error. Check your connection.",
+    "auth/popup-closed-by-user":         "Google sign-in was cancelled."
+  }[e.code] || "Google sign-in failed: " + e.message;
+}
+
+onAuthStateChanged(auth, async user => {
+  detach();
+  state.user = user;
+  if (!user) {
+    resetState();
+    $("login").style.display = "flex";
+    $("signOut").classList.add("hidden");
+    return;
+  }
+  $("login").style.display = "none";
+  $("signOut").classList.remove("hidden");
+  $("status").textContent = user.email;
+  state.isMaster = (user.email || "").toLowerCase() === MASTER_ADMIN_EMAIL.toLowerCase();
+  state.isAdmin  = state.isMaster || (await get(ref(db, `admins/${user.uid}`))).exists();
+  $("adminNav").classList.toggle("hidden", !state.isAdmin);
+  $("adminParticipantWrap").classList.toggle("hidden", !state.isAdmin);
+  startListeners();
+});
+
+let unsub = [];
+function detach() { unsub.forEach(f => f()); unsub = []; }
+function resetState() {
+  detach();
+  Object.assign(state, { isAdmin:false, isMaster:false, publicProfiles:{}, leaderboard:{}, myPrivate:null, myWeighins:{}, admins:{}, _viewPrivate:null, _viewWeighins:{} });
+  $("status").textContent = "Signed out";
+}
+
+function startListeners() {
+  const uid = state.user.uid;
+  unsub.push(onValue(ref(db, "publicProfiles"), s => {
+    state.publicProfiles = s.val() || {};
+    renderDashboard();
+    fillSelectors();
+  }));
+  unsub.push(onValue(ref(db, "leaderboard"), s => {
+    state.leaderboard = s.val() || {};
+    renderDashboard();
+    renderLeaderboard();
+  }));
+  unsub.push(onValue(ref(db, `privateProfiles/${uid}`), s => {
+    state.myPrivate = s.val() || null;
+    renderProgress();
+  }));
+  unsub.push(onValue(ref(db, `weighins/${uid}`), s => {
+    state.myWeighins = parseWeighins(s);
+    renderProgress();
+  }));
+  if (state.isAdmin) {
+    unsub.push(onValue(ref(db, "admins"), s => {
+      state.admins = s.val() || {};
+      renderAdmin();
+    }));
+  }
+}
+
+/* ── Register ── */
+$("registerForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  clearMessage("registerMsg");
+  const uid        = state.user.uid;
+  const name       = $("regName").value.trim();
+  const department = $("regDepartment").value.trim();
+  const height     = Number($("regHeight").value);
+  const weight     = Number($("regWeight").value);
+  const witness    = $("regWitness").value.trim();
+
+  if (name.length < 2 || department.length < 1 || witness.length < 2 || !isValidNumber(height,100,250) || !isValidNumber(weight,25,400)) {
+    message("registerMsg", "Check all fields and use realistic height and weight values.", "bad");
+    return;
+  }
+  if ((await get(ref(db, `privateProfiles/${uid}`))).exists()) {
+    message("registerMsg", "You are already registered.", "bad");
+    return;
+  }
+
+  const registeredAt = serverTimestamp();
+  const baseBmi      = bmi(weight, height);
+  const baseCat      = bmiCategory(baseBmi);
+  const updates      = {};
+  updates[`publicProfiles/${uid}`]  = { uid, name, department, registeredAt };
+  updates[`privateProfiles/${uid}`] = { uid, email: state.user.email, heightCm: height, baselineKg: weight, baselineBmi: baseBmi, baselineBmiCategory: baseCat.label, witness, registeredAt, registeredDate: today() };
+  updates[`leaderboard/${uid}`]     = { uid, name, department, percentageChange: 0, weeks: 0, updatedAt: serverTimestamp() };
+
+  try {
+    await update(ref(db), updates);
+    e.target.reset();
+    message("registerMsg", "Registration completed securely.", "good");
+  } catch(err) {
+    message("registerMsg", "Registration failed: " + err.message, "bad");
+  }
+});
+
+/* ── Weigh-in ── */
+$("weighForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  clearMessage("weighMsg");
+
+  let uid = state.user.uid;
+  if (state.isAdmin && $("weighParticipant").value) uid = $("weighParticipant").value;
+
+  const weight  = Number($("weighWeight").value);
+  const witness = $("weighWitness").value.trim();
+
+  if (!isValidNumber(weight, 25, 400) || witness.length < 2) {
+    message("weighMsg", "Enter a valid weight and witness name.", "bad");
+    return;
+  }
+
+  try {
+    const [pubSnap, privSnap, wSnap] = await Promise.all([
+      get(ref(db, `publicProfiles/${uid}`)),
+      get(ref(db, `privateProfiles/${uid}`)),
+      get(ref(db, `weighins/${uid}`))
+    ]);
+
+    if (!pubSnap.exists() || !privSnap.exists()) throw new Error("Participant is not registered.");
+
+    const pub     = pubSnap.val();
+    const priv    = privSnap.val();
+    const entries = Object.values(wSnap.val() || {}).sort((a, b) => a.createdAt - b.createdAt);
+
+    /* ── Duplicate prevention: one entry per day (master can override) ── */
+    const todayStr = today();
+    const alreadyToday = entries.some(en => en.date === todayStr);
+    if (alreadyToday && !state.isMaster) {
+      message("weighMsg", "A weigh-in has already been recorded today for this participant. The master administrator can override this.", "bad");
+      return;
+    }
+
+    const previous        = entries.length ? entries.at(-1).weightKg : priv.baselineKg;
+    const week            = entries.length + 1;
+    const total           = +(weight - priv.baselineKg).toFixed(1);
+    const change          = +(weight - previous).toFixed(1);
+    const percentageChange = +((total / priv.baselineKg) * 100).toFixed(2);
+    const entryBmi        = bmi(weight, priv.heightCm);
+    const entryBmiCat     = bmiCategory(entryBmi);
+
+    const entry = {
+      uid,
+      weightKg: weight,
+      bmi: entryBmi,
+      bmiCategory: entryBmiCat.label,
+      week,
+      witness,
+      changeKg: change,
+      totalChangeKg: total,
+      percentageChange,
+      date: todayStr,
+      createdAt: serverTimestamp(),
+      recordedByUid: state.user.uid,
+      recordedByEmail: state.user.email
+    };
+
+    const key     = push(ref(db, `weighins/${uid}`)).key;
+    const updates = {};
+    updates[`weighins/${uid}/${key}`] = entry;
+    updates[`leaderboard/${uid}`]     = { uid, name: pub.name, department: pub.department, percentageChange, weeks: week, updatedAt: serverTimestamp() };
+
+    await update(ref(db), updates);
+    e.target.reset();
+    message("weighMsg", `Week ${week} weigh-in recorded for ${pub.name}.`, "good");
+
+  } catch(err) {
+    message("weighMsg", "Weigh-in failed: " + err.message, "bad");
+  }
+});
+
+/* ── Dashboard ── */
+function renderDashboard() {
+  const profiles   = Object.values(state.publicProfiles);
+  const lb         = Object.values(state.leaderboard);
+  const totalWeeks = lb.reduce((n, x) => n + (Number(x.weeks) || 0), 0);
+
+  $("dashboardStats").innerHTML = `
+    <div class="stat"><small>Participants</small><b>${profiles.length}</b></div>
+    <div class="stat"><small>Weigh-ins logged</small><b>${totalWeeks}</b></div>
+    <div class="stat"><small>Your access</small><b style="font-size:16px">${state.isAdmin ? "Administrator" : "Participant"}</b></div>
+  `;
+
+  $("participantList").innerHTML = profiles.length
+    ? `<table><thead><tr><th>Name</th><th>Division</th></tr></thead><tbody>
+        ${profiles.sort((a,b) => a.name.localeCompare(b.name)).map(p =>
+          `<tr><td><strong>${esc(p.name)}</strong></td><td>${esc(p.department)}</td></tr>`
+        ).join("")}
+       </tbody></table>`
+    : "No participants registered.";
+}
+
+/* ── Fill selectors ── */
+function fillSelectors() {
+  const options = Object.values(state.publicProfiles)
+    .sort((a,b) => a.name.localeCompare(b.name))
+    .map(p => `<option value="${esc(p.uid)}">${esc(p.name)} — ${esc(p.department)}</option>`)
+    .join("");
+
+  $("weighParticipant").innerHTML      = `<option value="">Select participant</option>${options}`;
+  $("adminCandidate").innerHTML        = `<option value="">Select registered participant</option>${options}`;
+  $("adminViewParticipant").innerHTML  = `<option value="">Select participant</option>${options}`;
+}
+
+/* ── Progress rendering (own profile) ── */
+function renderProgress() {
+  renderProgressInto($("progressContent"), state.myPrivate, state.myWeighins, state.user, false);
+}
+
+/* ── Shared progress renderer (used for own profile and admin view) ── */
+function renderProgressInto(container, priv, weighinsMap, userObj, isAdminView) {
+  if (!container) return;
+
+  if (!priv) {
+    container.innerHTML = '<div class="card"><p class="loading-msg">Not registered or data not loaded.</p></div>';
+    return;
+  }
+
+  const uid     = priv.uid;
+  const pub     = state.publicProfiles[uid] || {};
+  const entries = Object.values(weighinsMap).sort((a, b) => {
+    /* Sort by week number; fall back to createdAt for stability */
+    if (a.week !== b.week) return a.week - b.week;
+    return (Number(a.createdAt) || 0) - (Number(b.createdAt) || 0);
+  });
+
+  const latest        = entries.at(-1);
+  const currentWeight = latest?.weightKg  ?? priv.baselineKg;
+  const totalChange   = latest?.totalChangeKg ?? 0;
+  const pct           = latest?.percentageChange ?? 0;
+  const currentBmi    = latest?.bmi ?? priv.baselineBmi;
+  const cat           = bmiCategory(currentBmi);
+  const baseCat       = bmiCategory(priv.baselineBmi);
+
+  const displayName = isAdminView
+    ? `${esc(pub.name || uid)} &mdash; ${esc(pub.department || "")}`
+    : esc(pub.name || userObj?.displayName || "My progress");
+
+  container.innerHTML = `
+    <div class="card">
+      <h2>${displayName}</h2>
+      <div class="grid">
+        <div class="stat">
+          <small>Current weight</small>
+          <b>${currentWeight} kg</b>
+        </div>
+        <div class="stat">
+          <small>Baseline weight</small>
+          <b>${priv.baselineKg} kg</b>
+        </div>
+        <div class="stat">
+          <small>Total change</small>
+          <b class="${totalChange < 0 ? 'negative' : totalChange > 0 ? 'positive' : ''}">
+            ${totalChange > 0 ? '+' : ''}${totalChange} kg
+            ${movementArrow(totalChange)}
+          </b>
+        </div>
+        <div class="stat">
+          <small>Overall % change</small>
+          <b style="font-size:16px">${pctLabel(pct)}</b>
+        </div>
+        <div class="stat">
+          <small>Current BMI</small>
+          <b style="font-size:16px">${currentBmi} <span class="badge ${cat.cls}">${cat.label}</span></b>
+        </div>
+        <div class="stat">
+          <small>Baseline BMI</small>
+          <b style="font-size:16px">${priv.baselineBmi} <span class="badge ${baseCat.cls}">${baseCat.label}</span></b>
+        </div>
+        <div class="stat">
+          <small>Weeks completed</small>
+          <b>${entries.length}</b>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Weigh-in history</h2>
+      ${entries.length ? `
+        <div class="tablewrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Week</th>
+                <th>Date</th>
+                <th>Weight</th>
+                <th>Change</th>
+                <th>Move</th>
+                <th>% from baseline</th>
+                <th>BMI</th>
+                <th>Category</th>
+                <th>Witness</th>
+                ${isAdminView ? '<th></th>' : ''}
+              </tr>
+            </thead>
+            <tbody>
+              ${entries.slice().reverse().map((x, i) => {
+                const ec      = bmiCategory(x.bmi);
+                const isLatest = i === 0;
+                return `<tr>
+                  <td>${x.week}</td>
+                  <td>${esc(x.date)}</td>
+                  <td>${x.weightKg} kg</td>
+                  <td class="${x.changeKg < 0 ? 'negative' : x.changeKg > 0 ? 'positive' : ''}">
+                    ${x.changeKg > 0 ? '+' : ''}${x.changeKg} kg
+                  </td>
+                  <td>${movementArrow(x.changeKg)}</td>
+                  <td>${pctLabel(x.percentageChange)}</td>
+                  <td>${x.bmi}</td>
+                  <td><span class="badge ${ec.cls}">${ec.label}</span></td>
+                  <td>${esc(x.witness)}</td>
+                  ${isAdminView ? `<td>${isLatest && x.key
+                    ? `<button class="btn danger small weighin-delete" data-uid="${esc(uid)}" data-key="${esc(x.key)}">Delete</button>`
+                    : ''}</td>` : ''}
+                </tr>`;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>
+      ` : '<p class="loading-msg">No weigh-ins recorded yet.</p>'}
+    </div>
+  `;
+
+  /* Attach delete listeners (admin view only) */
+  if (isAdminView) {
+    container.querySelectorAll(".weighin-delete").forEach(b => {
+      b.addEventListener("click", async () => {
+        if (!confirm("Delete this weigh-in entry? This cannot be undone.")) return;
+        try {
+          await remove(ref(db, `weighins/${b.dataset.uid}/${b.dataset.key}`));
+          /* Reload the view after deletion */
+          $("adminViewBtn").click();
+        } catch(err) {
+          alert("Delete failed: " + err.message);
+        }
+      });
+    });
+  }
+}
+
+/* ── Leaderboard ── */
+function renderLeaderboard() {
+  const rows = Object.values(state.leaderboard)
+    .filter(x => Number(x.weeks) > 0)
+    .sort((a, b) => a.percentageChange - b.percentageChange);
+
+  $("leaderboardTable").innerHTML = rows.length
+    ? `<table>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Name</th>
+            <th>Division</th>
+            <th>% change</th>
+            <th>Move</th>
+            <th>Weeks</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map((x, i) => `<tr>
+            <td>${i + 1}</td>
+            <td><strong>${esc(x.name)}</strong></td>
+            <td>${esc(x.department)}</td>
+            <td>${pctLabel(x.percentageChange)}</td>
+            <td>${movementArrow(x.percentageChange)}</td>
+            <td>${x.weeks}</td>
+          </tr>`).join("")}
+        </tbody>
+       </table>`
+    : '<p class="loading-msg">No qualifying weigh-ins yet.</p>';
+}
+
+/* ── Admin ── */
+function renderAdmin() {
+  if (!state.isAdmin) return;
+  const admins = Object.values(state.admins);
+  $("adminList").innerHTML = `
+    <table>
+      <thead><tr><th>Name</th><th>Email</th><th></th></tr></thead>
+      <tbody>
+        <tr><td>Master administrator</td><td>${esc(MASTER_ADMIN_EMAIL)}</td><td></td></tr>
+        ${admins.map(a => `<tr>
+          <td>${esc(a.name)}</td>
+          <td>${esc(a.email)}</td>
+          <td>${state.isMaster
+            ? `<button class="btn danger small remove-admin" data-uid="${esc(a.uid)}">Remove</button>`
+            : ""}</td>
+        </tr>`).join("")}
+      </tbody>
+    </table>
+  `;
+  document.querySelectorAll(".remove-admin").forEach(b => b.addEventListener("click", async () => {
+    if (confirm("Remove this administrator?")) await remove(ref(db, `admins/${b.dataset.uid}`));
+  }));
+  $("addAdmin").classList.toggle("hidden", !state.isMaster);
+  $("adminCandidate").disabled = !state.isMaster;
+}
+
+$("addAdmin").addEventListener("click", async () => {
+  clearMessage("adminMsg");
+  if (!state.isMaster) { message("adminMsg", "Only the master administrator can grant access.", "bad"); return; }
+  const uid = $("adminCandidate").value;
+  const p   = state.publicProfiles[uid];
+  if (!uid || !p) { message("adminMsg", "Select a registered participant.", "bad"); return; }
+  try {
+    const priv = (await get(ref(db, `privateProfiles/${uid}`))).val();
+    await set(ref(db, `admins/${uid}`), { uid, email: priv.email, name: p.name, addedAt: serverTimestamp(), addedBy: state.user.email });
+    message("adminMsg", "Administrator access granted.", "good");
+  } catch(e) {
+    message("adminMsg", "Could not grant access: " + e.message, "bad");
+  }
+});
+
+/* ── Admin: view participant progress ── */
+$("adminViewBtn").addEventListener("click", async () => {
+  const uid = $("adminViewParticipant").value;
+  if (!uid || !state.isAdmin) return;
+
+  const box = $("adminProgressView");
+  box.innerHTML = '<p class="loading-msg">Loading participant data...</p>';
+
+  try {
+    const [privSnap, wSnap] = await Promise.all([
+      get(ref(db, `privateProfiles/${uid}`)),
+      get(ref(db, `weighins/${uid}`))
+    ]);
+
+    state._viewPrivate  = privSnap.val() || null;
+    state._viewWeighins = parseWeighins(wSnap);
+
+    renderProgressInto(box, state._viewPrivate, state._viewWeighins, null, true);
+  } catch(err) {
+    box.innerHTML = `<p class="msg bad">Failed to load: ${esc(err.message)}</p>`;
+  }
+});
+
+/* ── Exports ── */
+$("exportParticipants").addEventListener("click", async () => {
+  if (!state.isAdmin) return;
+  const rows = [["Name","Division","Email","Height cm","Baseline kg","Baseline BMI","Baseline BMI Category","Registered"]];
+  for (const p of Object.values(state.publicProfiles).sort((a,b) => a.name.localeCompare(b.name))) {
+    const priv = (await get(ref(db, `privateProfiles/${p.uid}`))).val();
+    rows.push([p.name, p.department, priv?.email, priv?.heightCm, priv?.baselineKg, priv?.baselineBmi, priv?.baselineBmiCategory, priv?.registeredDate]);
+  }
+  download("MTCA_Wellness_Registrations.csv", rows);
+});
+
+$("exportWeighins").addEventListener("click", async () => {
+  if (!state.isAdmin) return;
+  const rows = [["Name","Week","Date","Weight kg","Change kg","Total change kg","% from baseline","BMI","BMI Category","Witness","Recorded by"]];
+  for (const p of Object.values(state.publicProfiles).sort((a,b) => a.name.localeCompare(b.name))) {
+    const snap    = await get(ref(db, `weighins/${p.uid}`));
+    const entries = Object.values(snap.val() || {}).sort((a,b) => a.week - b.week);
+    entries.forEach(x => rows.push([
+      p.name, x.week, x.date, x.weightKg, x.changeKg, x.totalChangeKg,
+      x.percentageChange, x.bmi, x.bmiCategory || bmiCategory(x.bmi).label,
+      x.witness, x.recordedByEmail || ""
+    ]));
+  }
+  download("MTCA_Wellness_WeighIns.csv", rows);
+});
 </script>
 </body>
 </html>
